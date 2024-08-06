@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQaStore } from '@/stores/qa';
+import { useChatStore } from '@/stores/chat';
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
 
-const qaStore = useQaStore();
+const chatStore = useChatStore();
 const router = useRouter()
 
 const registerData = ref({

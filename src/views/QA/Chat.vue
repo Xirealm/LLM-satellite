@@ -1,70 +1,75 @@
 <script setup lang="ts">
-import { ref , watch } from 'vue'
-import { RouterView , useRouter } from 'vue-router';
-import { marked } from '@/utils/marked'
-import markdownToTxt from 'markdown-to-txt';
-import { copyText } from "@/utils/copyText"
+import { ref, watch } from "vue";
+import { RouterView, useRouter } from "vue-router";
+import { marked } from "@/utils/marked";
+import markdownToTxt from "markdown-to-txt";
+import { copyText } from "@/utils/copyText";
 // import clipboard from 'clipboard'
 
-import { ElMessage } from 'element-plus'
-import type { UploadProps, UploadUserFile } from 'element-plus'
+import { ElMessage } from "element-plus";
+import type { UploadProps, UploadUserFile } from "element-plus";
 
-import { deleteQuestion, postSimilarText, source } from '../../services/qa'
+import { deleteQuestion, postSimilarText, source } from "../../services/qa";
 
-import Introduction from "./components/Introduction.vue"
-import UploadPopup from "./components/UploadPopup.vue"
+import Introduction from "./components/Introduction.vue";
+import UploadPopup from "./components/UploadPopup.vue";
 
-import IconCopy from "./components/icons/IconCopy.vue"
-import IconLike from "./components/icons/IconLike.vue"
-import IconDislike from "./components/icons/IconDislike.vue"
-import IconFire from "./components/icons/IconFire.vue"
-import Input from './components/Input.vue';
+import IconCopy from "./components/icons/IconCopy.vue";
+import IconLike from "./components/icons/IconLike.vue";
+import IconDislike from "./components/icons/IconDislike.vue";
+import IconFire from "./components/icons/IconFire.vue";
+import Input from "./components/Input.vue";
 
-import type{ Mode } from "@/types/qa.d.ts"
+import type { Mode } from "@/types/qa.d.ts";
 
-import { useQaStore } from '@/stores/qa'
-const qaStore = useQaStore()
-const router = useRouter()
+import { useChatStore } from "@/stores/chat";
+const chatStore = useChatStore();
+const router = useRouter();
 
-watch(() => qaStore.questionList.length, () => {
-  if (qaStore.questionList.length === 0) {
-    router.push('/')
+watch(
+  () => chatStore.questionList.length,
+  () => {
+    if (chatStore.questionList.length === 0) {
+      router.push("/");
+    }
+    if (chatStore.questionList.length > 0) {
+      router.push("/chat");
+    }
   }
-  if (qaStore.questionList.length > 0) {
-    router.push('/chat')
-  }
-})
+);
 
 //窗口滚动
-const main = ref<HTMLElement>()
+const main = ref<HTMLElement>();
 const scroll = () => {
   setTimeout(() => {
     main.value!.scrollBy({
       top: main.value!.scrollHeight,
-      behavior: 'smooth'
-    })
-  },10)
-}
+      behavior: "smooth",
+    });
+  }, 10);
+};
 
 //问答模式
-const mode = ref<Mode>("enhancedAnswer")
-const modeList = ref<{ label: '相似文本' | '增强回答' | '原始回答', value: Mode }[]>([
+const mode = ref<Mode>("enhancedAnswer");
+const modeList = ref<
+  { label: "相似文本" | "增强回答" | "原始回答"; value: Mode }[]
+>([
   { label: "增强回答", value: "enhancedAnswer" },
   { label: "相似文本", value: "similarText" },
-  { label: "原始回答", value: "rawAnswer" }
-])
-const input = ref('')
-const ws = ref<WebSocket>()
-const currentStatus = ref("undo")
-const chat = ref()
+  { label: "原始回答", value: "rawAnswer" },
+]);
+const input = ref("");
+const ws = ref<WebSocket>();
+const currentStatus = ref("undo");
+const chat = ref();
 const sendQuestion = async () => {
-  chat.value.sendQuestion(input.value)
-  input.value = ""
+  // chat.value.sendQuestion(input.value)
+  // input.value = ""
   // console.log(input.value);
   // if (input.value === "" || currentStatus.value === 'doing') return
   // const question = input.value
   // input.value = ""
-  // qaStore.questionList.push({
+  // chatStore.questionList.push({
   //   question: question,
   //   rawAnswer: { content:'',text:'',status:'undo' },
   //   enhancedAnswer: { content: '',text:'',status:'undo'},
@@ -72,10 +77,10 @@ const sendQuestion = async () => {
   //   activeAnswer:mode.value
   // })
   // scroll()
-  // getAnswer(question,mode.value,qaStore.questionList.length - 1)
-}
+  // getAnswer(question,mode.value,chatStore.questionList.length - 1)
+};
 // const closeQuestion = (mode:'similarText' | 'enhancedAnswer' | 'rawAnswer',index:number) => {
-//   qaStore.questionList[index][mode].status = 'close'
+//   chatStore.questionList[index][mode].status = 'close'
 //   currentStatus.value = 'undo'
 //   if(mode === 'similarText'){
 //     source.cancel('similarText closed')
@@ -85,22 +90,22 @@ const sendQuestion = async () => {
 // }
 // const reQuestion = (question: string, mode: Mode, index: number) => {
 //   if (currentStatus.value === 'doing') return
-//   qaStore.questionList[index][mode].content = ""
+//   chatStore.questionList[index][mode].content = ""
 //   getAnswer(question,mode,index)
 // }
 // const getAnswer = async (question: any, mode: Mode, index: number,) => {
-//   qaStore.questionList[index][mode].status = 'doing'
+//   chatStore.questionList[index][mode].status = 'doing'
 //   currentStatus.value = 'doing'
-//   console.log(qaStore.questionList[index][mode].status)
+//   console.log(chatStore.questionList[index][mode].status)
 //   if (mode === 'similarText') {
 //     const result = await postSimilarText(question)
 //     // console.log(result.similar_texts);
-//     qaStore.questionList[index].similarText.text = markdownToTxt(result.similar_texts);
-//     qaStore.questionList[index].similarText.content = await marked.parse(result.similar_texts)
-//     qaStore.questionList[index].similarText.status = 'done'
+//     chatStore.questionList[index].similarText.text = markdownToTxt(result.similar_texts);
+//     chatStore.questionList[index].similarText.content = await marked.parse(result.similar_texts)
+//     chatStore.questionList[index].similarText.status = 'done'
 //     currentStatus.value = 'done'
-//     if (qaStore.questionList[qaStore.questionList.length - 1].similarText.status === 'done') {
-//       scroll() 
+//     if (chatStore.questionList[chatStore.questionList.length - 1].similarText.status === 'done') {
+//       scroll()
 //     }
 //     return
 //   }
@@ -124,13 +129,13 @@ const sendQuestion = async () => {
 //   ws.value!.onmessage = async (event: any) => {
 //     // console.log("WebSocket message received:", event.data);
 //     if (event.data === JSON.stringify({ ans: "DONE" })) {
-//       qaStore.questionList[index][mode].status = 'done'
+//       chatStore.questionList[index][mode].status = 'done'
 //       currentStatus.value = 'done'
 //       return
 //     }
-//     qaStore.questionList[index][mode].text = markdownToTxt(event.data)
-//     qaStore.questionList[index][mode].content = await marked.parse(event.data)
-//     if (qaStore.questionList[qaStore.questionList.length - 1][mode].status === 'doing') {
+//     chatStore.questionList[index][mode].text = markdownToTxt(event.data)
+//     chatStore.questionList[index][mode].content = await marked.parse(event.data)
+//     if (chatStore.questionList[chatStore.questionList.length - 1][mode].status === 'doing') {
 //       scroll()
 //     }
 //   }
@@ -140,8 +145,8 @@ const sendQuestion = async () => {
 // }
 // const changeActiveAnswer = (question:string,mode:Mode,index:number)=>{
 //   console.log(question, mode, index)
-//   console.log(qaStore.questionList[index][mode].status);
-//   if (qaStore.questionList[index][mode].status !== 'undo') return
+//   console.log(chatStore.questionList[index][mode].status);
+//   if (chatStore.questionList[index][mode].status !== 'undo') return
 //   getAnswer(question, mode, index)
 // }
 // //上传数据
@@ -181,16 +186,19 @@ const sendQuestion = async () => {
 
 <template>
   <!-- <div class="h-full w-full overflow-hidden"> -->
-    <!-- <Introduction v-if="qaStore.questionList.length === 0"/> -->
-    <router-view v-slot="{ Component }">
-      <component :is="Component" ref="chat" />
-    </router-view>
-    <div class="main md:h-[calc(100vh-80px-130px)] h-[calc(100vh-60px-120px)]" ref="main">
-      <!-- 简介 -->
-      <!-- <Introduction v-if="qaStore.questionList.length === 0"/> -->
-      <!-- 问答列表 -->
-      <!-- <div
-        v-for="(item,index) in qaStore.questionList" 
+  <!-- <Introduction v-if="chatStore.questionList.length === 0"/> -->
+  <router-view v-slot="{ Component }">
+    <component :is="Component" ref="chat" />
+  </router-view>
+  <div
+    class="main md:h-[calc(100vh-80px-130px)] h-[calc(100vh-60px-120px)]"
+    ref="main"
+  >
+    <!-- 简介 -->
+    <!-- <Introduction v-if="chatStore.questionList.length === 0"/> -->
+    <!-- 问答列表 -->
+    <!-- <div
+        v-for="(item,index) in chatStore.questionList" 
         class="md:w-1/2 w-11/12 mx-auto my-5 transition ease-in-out duration-200 relative">
         <img src="../../assets/questionUser.png" class="absolute -left-10 w-10 hidden md:block"/>
         <div class="mx-auto w-full md:w-[50vw] flex md:justify-start justify-end">
@@ -200,7 +208,7 @@ const sendQuestion = async () => {
         </div>
         <div class="relative">
           <img 
-            v-if="index === qaStore.questionList.length - 1" src="../../assets/model.png" 
+            v-if="index === chatStore.questionList.length - 1" src="../../assets/model.png" 
             class="absolute -left-10 top-14 w-10 hidden md:block"/>
           <img 
             v-else src="../../assets/modelDone.png"  
@@ -218,23 +226,23 @@ const sendQuestion = async () => {
             <div class="w-full h-6 relative mt-1">
               <div class="absolute left top-0 text-blue-400 text-sm hover:text-gray-400">
                 <button 
-                  v-if="qaStore.questionList[index][item.activeAnswer].status === 'doing'"
+                  v-if="chatStore.questionList[index][item.activeAnswer].status === 'doing'"
                   @click="closeQuestion(item.activeAnswer,index)">停止生成
                 </button>
                 <button 
-                  v-else-if="qaStore.questionList[index][item.activeAnswer].status === 'done'&&currentStatus!=='doing'" 
+                  v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'done'&&currentStatus!=='doing'" 
                   @click="reQuestion(item.question,item.activeAnswer,index)">
                   重新生成
                 </button>
                 <button 
-                  v-else-if="qaStore.questionList[index][item.activeAnswer].status === 'close'" 
+                  v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'close'" 
                   @click="reQuestion(item.question,item.activeAnswer,index)"
                   class="text-gray-400">
                   已停止
                 </button>
               </div>
               <div class="absolute right-0 top-0 flex gap-2">
-                <span @click = "copyText(qaStore.questionList[index][item.activeAnswer].text)"><IconCopy /></span>
+                <span @click = "copyText(chatStore.questionList[index][item.activeAnswer].text)"><IconCopy /></span>
                 <span><IconLike /></span>
                 <span><IconDislike /></span>
               </div>
@@ -242,8 +250,8 @@ const sendQuestion = async () => {
           </el-tabs>
         </div>
       </div> -->
-    </div>
-    <Input v-model:input="input" @sendQuestion = "sendQuestion"/>
+  </div>
+  <Input v-model:input="input" @sendQuestion="sendQuestion" />
   <!-- </div> -->
   <!-- 上传语料弹窗 -->
   <!-- <UploadPopup 
@@ -264,20 +272,23 @@ const sendQuestion = async () => {
 </template>
 
 <style scoped lang="scss">
-.main{
+.main {
   overflow: auto;
-  &::-webkit-scrollbar { 
-     width: 3px;   /* 滚动条宽度 */
+  &::-webkit-scrollbar {
+    width: 3px; /* 滚动条宽度 */
   }
-  &::-webkit-scrollbar-track {   /* 滚动条轨道样式 */
+  &::-webkit-scrollbar-track {
+    /* 滚动条轨道样式 */
     background-color: #f5f5f5;
     border-radius: 10px;
   }
-  &::-webkit-scrollbar-thumb {    /* 滚动条滑块样式 */
+  &::-webkit-scrollbar-thumb {
+    /* 滚动条滑块样式 */
     background-color: #9c9c9c;
     border-radius: 10px;
   }
-  &::-webkit-scrollbar-thumb:hover {   /* 滑块在hover时的样式 */
+  &::-webkit-scrollbar-thumb:hover {
+    /* 滑块在hover时的样式 */
     background-color: #aaa;
   }
 }
@@ -289,35 +300,35 @@ const sendQuestion = async () => {
     line-height: 1.5rem; /* 24px */
   }
   :deep(h1) {
-    font-weight:600;
+    font-weight: 600;
     @media (min-width: 768px) {
-      font-size:1.4rem;
+      font-size: 1.4rem;
     }
   }
   :deep(h2) {
-    font-weight:600;
+    font-weight: 600;
     @media (min-width: 768px) {
-      font-size:1.3rem;
+      font-size: 1.3rem;
     }
   }
   :deep(h3) {
-    font-weight:600;
+    font-weight: 600;
     @media (min-width: 768px) {
-      font-size:1.2rem;
+      font-size: 1.2rem;
     }
   }
   :deep(h4) {
-    font-weight:600;
+    font-weight: 600;
     @media (min-width: 768px) {
-      font-size:1.1rem;
+      font-size: 1.1rem;
     }
   }
   :deep(h5) {
-    font-size:1rem;
-    font-weight:600;
+    font-size: 1rem;
+    font-weight: 600;
   }
   :deep(p) {
-    margin:0.3rem 0;
+    margin: 0.3rem 0;
   }
 }
 </style>

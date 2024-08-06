@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQaStore } from '@/stores/qa';
+import { useChatStore } from '@/stores/chat';
 import { useRouter } from 'vue-router'
 
-const qaStore = useQaStore();
+const chatStore = useChatStore();
 const router = useRouter()
 
 const status = defineModel('status')
@@ -17,7 +17,7 @@ const login = () => {
 }
 </script>
 <template>
-    <span class="text-2xl pb-4">欢迎使用{{ qaStore.title }}</span>
+    <span class="text-2xl pb-4">欢迎使用{{ chatStore.title }}</span>
     <el-input v-model="loginData.phone" placeholder="请输入手机号" />
     <el-input v-model="loginData.password" type="password" placeholder="请输入登录密码" />
     <div class="flex justify-between w-full mb-4">
