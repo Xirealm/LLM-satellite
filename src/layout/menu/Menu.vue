@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 import { useChatStore } from "@/stores/chat";
 import History from "@/components/History.vue";
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
+
+const newChat = () => {
+  router.push("/index")
+  chatStore.newQuestion();
+};
 </script>
 
 <template>
@@ -20,7 +27,7 @@ const isHistoryOpen = ref(false);
     <div
       class="flex bg-white my-5 flex-col w-4/5 h-36 justify-between py-4 px-6 items-start rounded-md"
     >
-      <button class="w-full flex items-center" @click="chatStore.newQuestion">
+      <button class="w-full flex items-center" @click="newChat">
         <span class="w-8"
           ><img src="../../assets/image/menu/talk.png" width="24" alt=""
         /></span>

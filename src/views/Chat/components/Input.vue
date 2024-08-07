@@ -14,9 +14,10 @@ const feedData = () => {
 
 // 发送问题
 const sendQuestion = async () => {
-  console.log(input.value);
-  const question = input.value as string;
-  if (question === "" || chatStore.chatStatus === "doing") return;
+  console.log(input.value)
+  const question = input.value as string
+  input.value = ""
+  if (question === "" || chatStore.chatStatus === "doing") return
   chatStore.questionList.push({
     question: question,
     rawAnswer: { content: "", text: "", status: "undo" },

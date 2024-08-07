@@ -1,8 +1,8 @@
 import axios from "axios"
 
 export const http = axios.create({
-  // baseURL: "http://47.100.198.147:7001/api",
-  baseURL: "http://5eed5804.r12.cpolar.top/api",
+  baseURL: "http://47.100.198.147:7001/api",
+  // baseURL: "http://5eed5804.r12.cpolar.top/api",
 });
 // 添加响应拦截器
 http.interceptors.response.use(function (response) {

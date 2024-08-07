@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch,watchEffect } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import { marked } from "@/utils/marked";
 import markdownToTxt from "markdown-to-txt";
@@ -26,18 +26,14 @@ import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
 const router = useRouter();
 
-watch(
-  () => chatStore.questionList.length,
-  () => {
-    if (chatStore.questionList.length === 0) {
-      router.push("/");
-    }
-    if (chatStore.questionList.length > 0) {
-      router.push("/chat");
-    }
+watchEffect(() => {
+  if (chatStore.questionList.length === 0) {
+    router.push("/index");
   }
-);
-
+  if (chatStore.questionList.length > 0) {
+    router.push("/chat");
+  }
+})
 //窗口滚动
 const main = ref<HTMLElement>();
 const scroll = () => {
@@ -49,18 +45,8 @@ const scroll = () => {
   }, 10);
 };
 
-//问答模式
-const mode = ref<Mode>("enhancedAnswer");
-const modeList = ref<
-  { label: "相似文本" | "增强回答" | "原始回答"; value: Mode }[]
->([
-  { label: "增强回答", value: "enhancedAnswer" },
-  { label: "相似文本", value: "similarText" },
-  { label: "原始回答", value: "rawAnswer" },
-]);
-const input = ref("");
-const ws = ref<WebSocket>();
-const currentStatus = ref("undo");
+const input = ref("")
+
 const chat = ref();
 const sendQuestion = async () => {
   // chat.value.sendQuestion(input.value)
@@ -191,7 +177,6 @@ const sendQuestion = async () => {
     <component :is="Component" ref="chat" />
   </router-view>
   <div
-    class="main md:h-[calc(100vh-80px-130px)] h-[calc(100vh-60px-120px)]"
     ref="main"
   >
     <!-- 简介 -->
@@ -251,7 +236,7 @@ const sendQuestion = async () => {
         </div>
       </div> -->
   </div>
-  <Input v-model:input="input" @sendQuestion="sendQuestion" />
+  <Input v-model:input="input" />
   <!-- </div> -->
   <!-- 上传语料弹窗 -->
   <!-- <UploadPopup 
