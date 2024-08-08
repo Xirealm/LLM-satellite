@@ -31,19 +31,25 @@ const newChat = () => {
         <span class="w-8"
           ><img src="../../assets/image/menu/talk.png" width="24" alt=""
         /></span>
-        <span class="text-xs">新建对话</span>
+        <span class="text-xs">主页</span>
       </button>
-      <button class="w-full flex items-center" @click="isHistoryOpen = true">
+      <!-- <button class="w-full flex items-center" @click="isHistoryOpen = true">
         <span class="w-8"
           ><img src="../../assets/image/menu/history.png" width="24" alt=""
         /></span>
         <span class="text-xs">历史记录</span>
-      </button>
-      <button class="w-full flex items-center" @click="isHistoryOpen = true">
+      </button> -->
+      <button class="w-full flex items-center" @click="router.push('/library')">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
-        <span class="text-xs">知识库管理</span>
+        <span class="text-xs">上传记录</span>
+      </button>
+      <button class="w-full flex items-center" @click="router.push('/library')">
+        <span class="w-8"
+          ><img src="../../assets/image/menu/base.png" width="20" alt=""
+        /></span>
+        <span class="text-xs">知识库</span>
       </button>
     </div>
   </div>

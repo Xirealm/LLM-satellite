@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Chat from "../views/Chat/Chat.vue";
 
 const router = createRouter({
   // history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -17,26 +16,27 @@ const router = createRouter({
         {
           name: "main",
           path: "main",
-          redirect:"/index",
-          component: Chat,
+          redirect: "/index",
+          component: () => import("../views/Chat/Chat.vue"),
           children: [
             {
               name: "index",
               path: "/index",
-              component: () => import("../views/Chat/components/Introduction.vue"),
+              component: () =>
+                import("../views/Chat/components/Introduction.vue"),
             },
             {
               name: "chat",
               path: "/chat",
               component: () => import("../views/Chat/components/ChatList.vue"),
             },
-          ]
+          ],
         },
-        // {
-        //   name: "chat",
-        //   path: "chat",
-        //   component: Chat,
-        // },
+        {
+          name: "library",
+          path: "library",
+          component: () => import("../views/Library/Library.vue"),
+        },
       ],
     },
   ],

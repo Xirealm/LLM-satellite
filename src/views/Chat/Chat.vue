@@ -171,71 +171,9 @@ const sendQuestion = async () => {
 </script>
 
 <template>
-  <!-- <div class="h-full w-full overflow-hidden"> -->
-  <!-- <Introduction v-if="chatStore.questionList.length === 0"/> -->
   <router-view v-slot="{ Component }">
     <component :is="Component" ref="chat" />
   </router-view>
-  <div
-    ref="main"
-  >
-    <!-- 简介 -->
-    <!-- <Introduction v-if="chatStore.questionList.length === 0"/> -->
-    <!-- 问答列表 -->
-    <!-- <div
-        v-for="(item,index) in chatStore.questionList" 
-        class="md:w-1/2 w-11/12 mx-auto my-5 transition ease-in-out duration-200 relative">
-        <img src="../../assets/questionUser.png" class="absolute -left-10 w-10 hidden md:block"/>
-        <div class="mx-auto w-full md:w-[50vw] flex md:justify-start justify-end">
-          <div class="bg-blue-500 rounded-lg text-white px-3 py-3 text-sm md:text-base">
-            <span>{{ item.question }}</span>
-          </div>
-        </div>
-        <div class="relative">
-          <img 
-            v-if="index === chatStore.questionList.length - 1" src="../../assets/model.png" 
-            class="absolute -left-10 top-14 w-10 hidden md:block"/>
-          <img 
-            v-else src="../../assets/modelDone.png"  
-            class="absolute -left-10 top-14 w-10 hidden md:block"/>
-          <el-tabs 
-            v-model="item.activeAnswer" class="mx-auto md:w-[50vw]"
-            @tab-change="changeActiveAnswer(item.question,item.activeAnswer,index)">
-            <el-tab-pane :disabled="currentStatus === 'doing'" v-for="mode in modeList" :label="mode.label" :name="mode.value">
-              <div class="bg-gray-100 rounded-lg max-w-2/3 px-3 py-3">
-                <IconFire v-if="item[mode.value].content==='' && item[mode.value].status === 'close'"/>
-                <IconFire class="animate-pulse" v-else-if="item[mode.value].content===''"/>
-                <el-text class="answer mx-10 text-black" size="large" v-html="item[mode.value].content"></el-text>
-              </div>
-            </el-tab-pane>
-            <div class="w-full h-6 relative mt-1">
-              <div class="absolute left top-0 text-blue-400 text-sm hover:text-gray-400">
-                <button 
-                  v-if="chatStore.questionList[index][item.activeAnswer].status === 'doing'"
-                  @click="closeQuestion(item.activeAnswer,index)">停止生成
-                </button>
-                <button 
-                  v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'done'&&currentStatus!=='doing'" 
-                  @click="reQuestion(item.question,item.activeAnswer,index)">
-                  重新生成
-                </button>
-                <button 
-                  v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'close'" 
-                  @click="reQuestion(item.question,item.activeAnswer,index)"
-                  class="text-gray-400">
-                  已停止
-                </button>
-              </div>
-              <div class="absolute right-0 top-0 flex gap-2">
-                <span @click = "copyText(chatStore.questionList[index][item.activeAnswer].text)"><IconCopy /></span>
-                <span><IconLike /></span>
-                <span><IconDislike /></span>
-              </div>
-            </div>
-          </el-tabs>
-        </div>
-      </div> -->
-  </div>
   <Input v-model:input="input" />
   <!-- </div> -->
   <!-- 上传语料弹窗 -->
@@ -257,63 +195,4 @@ const sendQuestion = async () => {
 </template>
 
 <style scoped lang="scss">
-.main {
-  overflow: auto;
-  &::-webkit-scrollbar {
-    width: 3px; /* 滚动条宽度 */
-  }
-  &::-webkit-scrollbar-track {
-    /* 滚动条轨道样式 */
-    background-color: #f5f5f5;
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb {
-    /* 滚动条滑块样式 */
-    background-color: #9c9c9c;
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    /* 滑块在hover时的样式 */
-    background-color: #aaa;
-  }
-}
-.answer {
-  font-size: 0.875rem; /* 14px */
-  line-height: 1.25rem; /* 20px */
-  @media (min-width: 768px) {
-    font-size: 1rem; /* 16px */
-    line-height: 1.5rem; /* 24px */
-  }
-  :deep(h1) {
-    font-weight: 600;
-    @media (min-width: 768px) {
-      font-size: 1.4rem;
-    }
-  }
-  :deep(h2) {
-    font-weight: 600;
-    @media (min-width: 768px) {
-      font-size: 1.3rem;
-    }
-  }
-  :deep(h3) {
-    font-weight: 600;
-    @media (min-width: 768px) {
-      font-size: 1.2rem;
-    }
-  }
-  :deep(h4) {
-    font-weight: 600;
-    @media (min-width: 768px) {
-      font-size: 1.1rem;
-    }
-  }
-  :deep(h5) {
-    font-size: 1rem;
-    font-weight: 600;
-  }
-  :deep(p) {
-    margin: 0.3rem 0;
-  }
-}
 </style>

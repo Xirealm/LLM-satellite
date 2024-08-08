@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-// import NewChatButton from "./NewChatButton.vue"
-// import ModelTitle from "./ModelTitle.vue"
 import History from "@/components/History.vue";
 import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
-defineEmits(["newQuestion"]);
 const isHistoryOpen = ref(false);
 </script>
 
@@ -14,7 +11,7 @@ const isHistoryOpen = ref(false);
     class="h-[60px] relative flex flex-wrap items-center justify-between text-center bg-[url('../src/assets/header.jpg')]"
   >
     <img src="../../assets/image/title.png" alt="" class="mx-auto h-[30px]" />
-    <button
+    <!-- <button
       class="md:hidden block absolute top-5 left-4"
       @click="isHistoryOpen = true"
     >
@@ -25,7 +22,7 @@ const isHistoryOpen = ref(false);
       @click="chatStore.newQuestion"
     >
       <img src="../../assets/newChat.png" width="35" class="" />
-    </button>
+    </button> -->
   </header>
   <History v-model="isHistoryOpen" />
 </template>

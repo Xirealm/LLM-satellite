@@ -12,7 +12,7 @@ const isHistoryOpen = ref(false);
     class="h-[60px] relative flex flex-wrap items-center justify-between text-center bg-[url('../src/assets/header.jpg')]"
   >
     <img src="../../../assets/title.png" alt="" class="mx-auto h-[30px]" />
-    <button
+    <!-- <button
       class="md:hidden block absolute top-5 left-4"
       @click="isHistoryOpen = true"
     >
@@ -23,7 +23,7 @@ const isHistoryOpen = ref(false);
       @click="chatStore.newQuestion"
     >
       <img src="../../../assets/newChat.png" width="35" class="" />
-    </button>
+    </button> -->
   </header>
   <History v-model="isHistoryOpen" />
 </template>

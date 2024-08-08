@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import type { Mode } from "@/types/qa.d.ts";
 import { useChatStore } from "@/stores/chat";
-import UploadPopup from "./UploadPopup.vue";
+import UploadPopup from "@/components/UploadPopup.vue";
 
 const chatStore = useChatStore();
 const input = defineModel<string>("input");
@@ -124,7 +124,7 @@ defineEmits(["sendQuestion"]);
       </div>
     </div>
     <div class="w-screen text-center text-gray-600 text-xs md:text-sm">
-      内容由AI生成，基于{{ chatStore.title }}
+      所有内容均由{{ chatStore.title }}生成，其准确性和完整性无法保证，不代表我们的态度或观点
     </div>
   </div>
   <!-- 上传语料弹窗 -->

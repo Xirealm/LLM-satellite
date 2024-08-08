@@ -2,3 +2,12 @@
         ),
     ),
 );
+
+.el-dialog{
+    border-radius: 10px;
+    // width: 40vw;
+}
+
+.el-overlay-dialog{
+    background-color: rgba(0, 0, 0, 0.2);
+}
