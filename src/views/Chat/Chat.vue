@@ -12,7 +12,6 @@ import type { UploadProps, UploadUserFile } from "element-plus";
 import { deleteQuestion, postSimilarText, source } from "../../services/qa";
 
 import Introduction from "./components/Introduction.vue";
-import UploadPopup from "./components/UploadPopup.vue";
 
 import IconCopy from "./components/icons/IconCopy.vue";
 import IconLike from "./components/icons/IconLike.vue";

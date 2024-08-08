@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter()
 import History from "@/components/History.vue";
 import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
@@ -23,6 +25,7 @@ const isHistoryOpen = ref(false);
     >
       <img src="../../assets/newChat.png" width="35" class="" />
     </button> -->
+    <button class="mr-4" @click="router.push('/login')"><img src="../../assets/user.png" width="32" alt=""></button>
   </header>
   <History v-model="isHistoryOpen" />
 </template>

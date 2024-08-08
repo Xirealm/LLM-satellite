@@ -2,6 +2,7 @@
 import  { ref } from "vue"
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
+import Upload from "./Upload.vue";
 
 const isShow = defineModel('isShow')
 
@@ -19,18 +20,7 @@ const handlePreview: UploadProps['onPreview'] = (file) => {
 <template>
 <!-- 上传语料弹窗 -->
 <el-dialog v-model="isShow" top="20vh" width="40vw" destroy-on-close title="上传文件":z-index="9999">
-    <el-upload 
-        v-model:file-list="fileList" action="http://5eed5804.r12.cpolar.top/api/upload/" :on-preview="handlePreview" :on-remove="handleRemove" drag class="md:block" hidden>
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="md:block hidden el-upload__text">将文件拖到此处或 <em>点击上传</em></div>
-        <div class="el-upload__tip">仅支持txt,pdf格式；文件大小需小于 200MB </div>
-    </el-upload>
-    <!-- <el-upload 
-        v-model:file-list="fileList" action="http://5eed5804.r12.cpolar.top/api/upload/" :on-preview="handlePreview" :on-remove="handleRemove" class="block md:hidden">
-        <button class="bg-blue-500 text-white px-12 py-1 rounded">点击上传</button>
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="md:hidden block el-upload__text"><em>点击上传</em></div>
-    </el-upload> -->
+  <Upload />
 </el-dialog>
 </template>
 <style scoped lang="scss">

@@ -3,32 +3,11 @@ import { ref, reactive } from "vue";
 import { useRouter,RouterView } from "vue-router"
 const router = useRouter()
 import { UploadFilled } from "@element-plus/icons-vue";
-import knowledges from "./components/Knowledges.vue"
+import Base from "./components/Base.vue"
+import CreateBase from "./components/CreateBase.vue"
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
-
-const brandBase = ref("个人文件库");
-const brandOptions = [
-  {
-    value: '个人文件库',
-    label: '个人文件库',
-  },
-  {
-    value: '公共知识库1',
-    label: '公共知识库1',
-  },
-]
-interface User {
-  date: string;
-  name: string;
-  address: string;
-}
-
-const handleEdit = (index: number, row: User) => {
-  console.log(index, row);
-};
-const handleDelete = (index: number, row: User) => {
-  console.log(index, row);
-};
+import EditIcon from "./components/icons/EditIcon.vue"
+import { ElMessageBox } from 'element-plus'
 
 const tableData: any[] = [
   {
@@ -40,61 +19,80 @@ const tableData: any[] = [
   {
     date: "2024-07-21 16:58",
     name: "公共知识库1",
-    type: "公共库"
+    type: "公共库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "个人知识库1",
-    type: "个人库"
+    type: "个人库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "公共知识库1",
-    type: "公共库"
+    type: "公共库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "个人知识库1",
-    type: "个人库"
+    type: "个人库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "公共知识库1",
-    type: "公共库"
+    type: "公共库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "个人知识库1",
-    type: "个人库"
+    type: "个人库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "公共知识库1",
-    type: "公共库"
+    type: "公共库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "个人知识库1",
-    type: "个人库"
+    type: "个人库",
+    number:5
   },
   {
     date: "2024-07-21 16:58",
     name: "公共知识库1",
-    type: "公共库"
+    type: "公共库",
+    number:5
   },
 ];
+const handleEdit = (index: number, row: any) => {
+  console.log(index, row);
+};
+const handleDelete = (index: number, row: any) => {
+  console.log(index, row);
+};
 
-const manageKonwledges = (name:string) => {
+const baseVisible = ref(false)
+const openBase = (name:string) => {
     console.log("知识管理");
-    dialogVisible.value = true
-    // router.push({
-    //     name:'knowledges'
-    // })
+    baseVisible.value = true
 }
-import { ElMessageBox } from 'element-plus'
-
-const dialogVisible = ref(false)
-
+const editBaseNameIndex = ref()
+const editBaseName = (index:any) => {
+  editBaseNameIndex.value = index
+  
+}
+const createBaseVisible = ref(false)
+const createBase = (name:string) => {
+  console.log("知识管理");
+  createBaseVisible.value = true
+}
 const currentPage = ref(1)
 </script>
 
@@ -104,19 +102,27 @@ const currentPage = ref(1)
         <h2 class="text-lg font-semibold my-3">知识库</h2>
     </div>
         <div class="flex justify-end mb-5">
-            <el-button size="large" round color="#01358e">创建知识库</el-button>
+            <el-button @click="createBase" size="large" round color="#01358e">创建知识库</el-button>
         </div>
         <div class="flex flex-col p-5 bg-white rounded-xl shadow-xl">
-            <el-table :data="tableData" size="large">
-                <el-table-column label="知识库名称" prop="name" width="200">
+            <el-table :data="tableData" row-class-name="row">
+                <el-table-column label="知识库名称" prop="name" >
                     <template #default="scope">
-                    <el-link @click="manageKonwledges(scope.row.name)">{{ scope.row.name }}</el-link>
+                        <div class="group flex">
+                          <el-input class="h-full" v-if="editBaseNameIndex === scope.$index" type="text" v-model="scope.row.name"/>
+                          <template v-else>
+                            <el-link @click="openBase(scope.row.name)">{{ scope.row.name }}</el-link>   
+                            <button @click="editBaseName(scope.$index)" class="group-hover:block hidden ml-1">
+                                <EditIcon />
+                            </button>
+                          </template>
+                        </div>
                     </template>
                 </el-table-column> 
-                <el-table-column label="类型" prop="type" align="center"/>
-                <el-table-column label="文档数量" prop="number" align="center"/>
+                <el-table-column label="类型" prop="type" align="center"  width="100"/>
+                <el-table-column label="文档数量" prop="number" align="center" width="100"/>
                 <el-table-column label="更新时间" prop="date" align="center" width="200"/>
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" width="100">
                 <template #default="scope">
                     <el-link
                     :underline="false"
@@ -132,14 +138,15 @@ const currentPage = ref(1)
                     v-model:current-page="currentPage"
                     layout="prev, pager, next, jumper"
                     :total="50"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
                 />
             </div>
         </div>
   </div>
-  <knowledges v-model="dialogVisible"/>
+  <CreateBase v-model="createBaseVisible" />
+  <Base v-model="baseVisible"/>
 </template>
-<style scoped lang="scss">
-
+<style lang="scss">
+.el-table .row {
+  height: 50px;
+}
 </style>

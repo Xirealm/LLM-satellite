@@ -8,8 +8,8 @@ const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
 
 const newChat = () => {
-  router.push("/index")
   chatStore.newQuestion();
+  router.push("/index")
 };
 </script>
 
@@ -25,13 +25,13 @@ const newChat = () => {
     </h2>
     <span class="text-gray-500 text-xs">当前版本：v1.0.1</span>
     <div
-      class="flex bg-white my-5 flex-col w-4/5 h-36 justify-between py-4 px-6 items-start rounded-md"
+      class="flex bg-white my-5 flex-col w-4/5 py-2 px-2 items-start rounded-md"
     >
-      <button class="w-full flex items-center" @click="newChat">
+      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="newChat">
         <span class="w-8"
           ><img src="../../assets/image/menu/talk.png" width="24" alt=""
         /></span>
-        <span class="text-xs">主页</span>
+        <span class="text-sm">开启对话</span>
       </button>
       <!-- <button class="w-full flex items-center" @click="isHistoryOpen = true">
         <span class="w-8"
@@ -39,17 +39,17 @@ const newChat = () => {
         /></span>
         <span class="text-xs">历史记录</span>
       </button> -->
-      <button class="w-full flex items-center" @click="router.push('/library')">
+      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
-        <span class="text-xs">上传记录</span>
+        <span class="text-sm">上传记录</span>
       </button>
-      <button class="w-full flex items-center" @click="router.push('/library')">
+      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
-        <span class="text-xs">知识库</span>
+        <span class="text-sm">知识库</span>
       </button>
     </div>
   </div>
