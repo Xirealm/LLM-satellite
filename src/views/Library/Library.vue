@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive,nextTick } from "vue";
 import { useRouter,RouterView } from "vue-router"
 const router = useRouter()
 import { UploadFilled } from "@element-plus/icons-vue";
+import EditText from "@/components/EditText.vue"
 import Base from "./components/Base.vue"
 import CreateBase from "./components/CreateBase.vue"
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
@@ -83,11 +84,18 @@ const openBase = (name:string) => {
     console.log("知识管理");
     baseVisible.value = true
 }
-const editBaseNameIndex = ref()
-const editBaseName = (index:any) => {
-  editBaseNameIndex.value = index
-  
-}
+
+// const editBaseNameIndex = ref()
+// const editBaseNameInput = ref()
+// const editBaseName = async (index:any) => {
+//   editBaseNameIndex.value = index
+//   await nextTick()
+//   editBaseNameInput.value.focus()
+// }
+// const editBaseNameInputBlur = () => {
+//   editBaseNameIndex.value = null
+// }
+
 const createBaseVisible = ref(false)
 const createBase = (name:string) => {
   console.log("知识管理");
@@ -108,15 +116,18 @@ const currentPage = ref(1)
             <el-table :data="tableData" row-class-name="row">
                 <el-table-column label="知识库名称" prop="name" >
                     <template #default="scope">
-                        <div class="group flex">
-                          <el-input class="h-full" v-if="editBaseNameIndex === scope.$index" type="text" v-model="scope.row.name"/>
+                      <EditText :index="scope.$index" v-model:text="scope.row.name" @openBase="openBase">
+                        <el-link @click="openBase">{{ scope.row.name }}</el-link>   
+                      </EditText>
+                        <!-- <div class="group flex">
+                          <el-input class="h-full" ref="editBaseNameInput" @blur="editBaseNameInputBlur" v-if="editBaseNameIndex === scope.$index" type="text" v-model="scope.row.name"/>
                           <template v-else>
                             <el-link @click="openBase(scope.row.name)">{{ scope.row.name }}</el-link>   
                             <button @click="editBaseName(scope.$index)" class="group-hover:block hidden ml-1">
                                 <EditIcon />
                             </button>
                           </template>
-                        </div>
+                        </div> -->
                     </template>
                 </el-table-column> 
                 <el-table-column label="类型" prop="type" align="center"  width="100"/>

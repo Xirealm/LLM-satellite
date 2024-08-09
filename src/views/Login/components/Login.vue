@@ -21,15 +21,14 @@ const login = () => {
     <el-input v-model="loginData.phone" placeholder="请输入手机号" />
     <el-input v-model="loginData.password" type="password" placeholder="请输入登录密码" />
     <div class="flex justify-between w-full mb-4">
-        <span class="text-xs" @click="status = 'register'">注册账号</span>
-        <span class="text-xs">忘记密码？</span>
+        <el-link class="text-xs" @click="status = 'register'">注册账号</el-link>
+        <el-link class="text-xs">忘记密码？</el-link>
     </div>
     <div>
-        <button 
-            class="px-8 py-2 bg-blue-900 text-white rounded-full text-sm" 
-            @click="login">
-            登录
-        </button>
+        <el-button 
+            round color="#01358e" size="large" @click="login">
+            <span class="px-4 text-md">登录</span>
+        </el-button>
         <!-- OR
         <button 
             class="px-8 py-2 bg-blue-900 text-white rounded-full text-sm"

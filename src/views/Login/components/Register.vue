@@ -10,8 +10,10 @@ const chatStore = useChatStore();
 const router = useRouter()
 
 const registerData = ref({
-    phone: '',
-    password: '',
+  phone: '',
+  username:'',
+  password1: '',
+  password2: '',
 })
 
 const imageUrl = ref('')
@@ -36,7 +38,7 @@ const register = () => {
 }
 </script>
 <template>
-    <el-upload
+    <!-- <el-upload
         class="avatar-uploader"
         :show-file-list="false"
         :auto-upload="false"
@@ -45,11 +47,20 @@ const register = () => {
     >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-    </el-upload>
+    </el-upload> -->
+    <span class="flex justify-between w-full">
+      <el-link class="text-xs" @click="status = 'login'">返回登陆</el-link>
+      <span></span>
+    </span>
     <el-input v-model="registerData.phone" placeholder="请输入手机号" />
-    <el-input v-model="registerData.password" placeholder="请输入登录密码" />
+    <el-input v-model="registerData.username" placeholder="请输入用户名" />
+    <el-input v-model="registerData.password1" placeholder="请输入登录密码" />
+    <el-input v-model="registerData.password2" placeholder="请再次输入登录密码" />
     <div>
-        <button class="px-8 py-2 bg-blue-900 text-white rounded-full text-sm" @click="register">注册</button>
+      <el-button 
+        round color="#01358e" size="large" @click="register">
+        <span class="px-4 text-md">注册</span>
+      </el-button>
     </div>
 </template>
 <style>
