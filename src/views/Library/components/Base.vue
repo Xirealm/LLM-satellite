@@ -90,9 +90,11 @@ const currentPage = ref(1)
             <el-table :data="tableData">
               <el-table-column type="selection" />
               <el-table-column label="文件名称" prop="name" width="200">
-                  <template #default="scope">
-                  <el-link>{{ scope.row.name }}</el-link>
-                  </template>
+                 <template #default="scope">
+                      <EditText :index="scope.$index" v-model:text="scope.row.name">
+                        <el-link >{{ scope.row.name }}</el-link>   
+                      </EditText>
+                    </template>
               </el-table-column> 
               <el-table-column label="状态" prop="status" align="center"/>
               <el-table-column label="上传时间" prop="date" align="center"/>

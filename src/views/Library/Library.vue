@@ -117,7 +117,7 @@ const currentPage = ref(1)
             <el-table :data="tableData" row-class-name="row">
                 <el-table-column label="知识库名称" prop="name" >
                     <template #default="scope">
-                      <EditText :index="scope.$index" v-model:text="scope.row.name" @openBase="openBase">
+                      <EditText :index="scope.$index" v-model:text="scope.row.name">
                         <el-link @click="openBase">{{ scope.row.name }}</el-link>   
                       </EditText>
                     </template>
