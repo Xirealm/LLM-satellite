@@ -5,7 +5,7 @@ import { useChatStore } from "@/stores/chat";
 import UploadPopup from "@/components/UploadPopup.vue";
 
 const chatStore = useChatStore();
-const input = defineModel<string>("input");
+const input = ref("");
 
 const dialogFormVisible = ref(false);
 const feedData = () => {

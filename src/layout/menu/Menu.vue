@@ -39,12 +39,12 @@ const newChat = () => {
         /></span>
         <span class="text-xs">历史记录</span>
       </button> -->
-      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
+      <!-- <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
         <span class="text-sm">上传记录</span>
-      </button>
+      </button> -->
       <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""

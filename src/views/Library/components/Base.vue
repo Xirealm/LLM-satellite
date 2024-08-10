@@ -84,8 +84,8 @@ const currentPage = ref(1)
     </template>
         <div class="flex flex-col">
             <div class="flex justify-end">
-              <el-button class="w-20">删除文件</el-button>
-              <el-button class="w-20" @click="uploadVisible = true;">上传文件</el-button>
+              <el-button class="w-20" type="danger" plain>删除文件</el-button>
+              <el-button class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
             </div>
             <el-table :data="tableData">
               <el-table-column type="selection" />

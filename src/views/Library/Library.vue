@@ -105,12 +105,13 @@ const currentPage = ref(1)
 </script>
 
 <template>
-  <div class="w-1/2 mx-auto">
+  <div class="library w-1/2 mx-auto">
     <div class="flex flex-col my-5">
         <h2 class="text-lg font-semibold my-3">知识库</h2>
     </div>
         <div class="flex justify-end mb-5">
-            <el-button @click="createBase" size="large" round color="#01358e">创建知识库</el-button>
+          <!-- <el-input style="width: 300px;"></el-input> -->
+          <el-button @click="createBase" size="large" round color="#01358e">创建知识库</el-button>
         </div>
         <div class="flex flex-col p-5 bg-white rounded-xl shadow-xl">
             <el-table :data="tableData" row-class-name="row">
@@ -119,15 +120,6 @@ const currentPage = ref(1)
                       <EditText :index="scope.$index" v-model:text="scope.row.name" @openBase="openBase">
                         <el-link @click="openBase">{{ scope.row.name }}</el-link>   
                       </EditText>
-                        <!-- <div class="group flex">
-                          <el-input class="h-full" ref="editBaseNameInput" @blur="editBaseNameInputBlur" v-if="editBaseNameIndex === scope.$index" type="text" v-model="scope.row.name"/>
-                          <template v-else>
-                            <el-link @click="openBase(scope.row.name)">{{ scope.row.name }}</el-link>   
-                            <button @click="editBaseName(scope.$index)" class="group-hover:block hidden ml-1">
-                                <EditIcon />
-                            </button>
-                          </template>
-                        </div> -->
                     </template>
                 </el-table-column> 
                 <el-table-column label="类型" prop="type" align="center"  width="100"/>
@@ -137,10 +129,11 @@ const currentPage = ref(1)
                 <template #default="scope">
                     <el-link
                     :underline="false"
+                    class="icon-delete"
                     @click="handleDelete(scope.$index, scope.row)"
                     >
                     <DeleteIcon />
-                    </el-link>
+                  </el-link>
                 </template>
                 </el-table-column>
             </el-table>
@@ -160,4 +153,12 @@ const currentPage = ref(1)
 .el-table .row {
   height: 50px;
 }
+.icon-delete{
+  &:hover{
+    color:var(--el-color-error)
+  }
+}
+// .library .el-input__wrapper{
+//   border-radius: 20px;
+// }
 </style>

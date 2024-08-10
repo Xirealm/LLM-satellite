@@ -104,6 +104,12 @@ export const useChatStore = defineStore(
         ws.value!.close();
       }
     };
+    //重新提问
+    const reQuestion = (question: string, mode: Mode, index: number) => {
+      if (chatStatus.value === "doing") return;
+      questionList.value[index][mode].content = "";
+      getAnswer(question, mode, index);
+    };
     return {
       title,
       ws,
@@ -114,6 +120,7 @@ export const useChatStore = defineStore(
       newQuestion,
       closeQuestion,
       getAnswer,
+      reQuestion,
     };
   }
 );

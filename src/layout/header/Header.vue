@@ -25,7 +25,15 @@ const isHistoryOpen = ref(false);
     >
       <img src="../../assets/newChat.png" width="35" class="" />
     </button> -->
-    <button class="mr-4" @click="router.push('/login')"><img src="../../assets/user.png" width="32" alt=""></button>
+    <el-dropdown>
+      <button class="mr-6 bg-white rounded-full" @click="router.push('/login')"><img src="../../assets/user.png" width="36" alt=""></button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item>编辑信息</el-dropdown-item>
+          <el-dropdown-item divided>退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </header>
   <History v-model="isHistoryOpen" />
 </template>

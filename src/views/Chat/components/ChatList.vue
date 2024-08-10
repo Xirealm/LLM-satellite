@@ -3,12 +3,8 @@ import { ref, watch,watchEffect } from "vue";
 import type { Mode } from "@/types/qa.d.ts";
 import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
-import { deleteQuestion, postSimilarText, source } from "@/services/qa";
-import { marked } from "@/utils/marked";
-import markdownToTxt from "markdown-to-txt";
 import { copyText } from "@/utils/copyText";
-import { useRouter } from "vue-router";
-const router = useRouter();
+
 import IconCopy from "./icons/IconCopy.vue";
 import IconLike from "./icons/IconLike.vue";
 import IconDislike from "./icons/IconDislike.vue";
@@ -20,26 +16,6 @@ const main = ref<HTMLElement>();
 watch(() => chatStore.questionList[chatStore.questionList.length - 1], () => {
   scroll(main.value!);
 })
-
-// //关闭对话
-// const closeQuestion = (
-//   mode: "similarText" | "enhancedAnswer" | "rawAnswer",
-//   index: number
-// ) => {
-//   console.log("停止生成");
-//   chatStore.questionList[index][mode].status = "undo";
-//   chatStore.chatStatus = "undo";
-//   if (mode === "similarText") {
-//     source.cancel("similarText closed");
-//   } else {
-//     chatStore.ws!.close();
-//   }
-// };
-const reQuestion = (question: string, mode: Mode, index: number) => {
-  if (chatStore.chatStatus === "doing") return;
-  chatStore.questionList[index][mode].content = "";
-  chatStore.getAnswer(question, mode, index);
-};
 
 const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
   console.log(question, mode, index);
@@ -126,16 +102,13 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
                   chatStore.questionList[index][item.activeAnswer].status ===
                     'done' && chatStore.chatStatus !== 'doing'
                 "
-                @click="reQuestion(item.question, item.activeAnswer, index)"
+                @click="chatStore.reQuestion(item.question, item.activeAnswer, index)"
               >
                 重新生成
               </button>
               <button
-                v-else-if="
-                  chatStore.questionList[index][item.activeAnswer].status ===
-                  'undo'
-                "
-                @click="reQuestion(item.question, item.activeAnswer, index)"
+                v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'undo'"
+                @click="chatStore.reQuestion(item.question, item.activeAnswer, index)"
                 class="text-gray-400"
               >
                 已停止
