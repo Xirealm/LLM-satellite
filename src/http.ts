@@ -1,4 +1,6 @@
 import axios from "axios"
+import { useUserStore } from "./stores/user";
+const userStore = useUserStore()
 
 export const http = axios.create({
   baseURL: "http://47.100.198.147:7001/api",
@@ -8,9 +10,9 @@ export const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 携带token
-    // if (Session.get("token")) {
-    //   config.headers["Authorization"] = `${Session.get("token")}`;
-    // }
+    if (userStore.user.token !== '') {
+      config.headers["Authorization"] = userStore.user.token;
+    }
     return config;
   },
   (error) => {
