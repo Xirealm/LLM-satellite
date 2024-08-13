@@ -42,7 +42,7 @@ const handleChange = (val: string[]) => {
 </el-drawer>
 </template>
 <style lang="scss">
-.el-overlay{
-  background-color: transparent;
-}
+// .el-overlay{
+//   background-color: transparent;
+// }
 </style>

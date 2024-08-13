@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import type { Mode } from "@/types/qa.d.ts";
+import type { Mode } from "@/types/chat";
 import { useChatStore } from "@/stores/chat";
 import UploadPopup from "@/components/UploadPopup.vue";
 
@@ -14,10 +14,10 @@ const feedData = () => {
 
 // 发送问题
 const sendQuestion = async () => {
-  console.log(input.value)
-  const question = input.value as string
-  input.value = ""
-  if (question === "" || chatStore.chatStatus === "doing") return
+  console.log(input.value);
+  const question = input.value as string;
+  input.value = "";
+  if (question === "" || chatStore.chatStatus === "doing") return;
   chatStore.questionList.push({
     question: question,
     rawAnswer: { content: "", text: "", status: "undo" },
@@ -124,7 +124,9 @@ defineEmits(["sendQuestion"]);
       </div>
     </div>
     <div class="w-screen text-center text-gray-600 text-xs md:text-sm">
-      所有内容均由{{ chatStore.title }}生成，其准确性和完整性无法保证，不代表我们的态度或观点
+      所有内容均由{{
+        chatStore.title
+      }}生成，其准确性和完整性无法保证，不代表我们的态度或观点
     </div>
   </div>
   <!-- 上传语料弹窗 -->

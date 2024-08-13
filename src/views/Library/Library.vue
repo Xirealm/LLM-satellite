@@ -7,8 +7,7 @@ import EditText from "@/components/EditText.vue"
 import Base from "./components/Base.vue"
 import CreateBase from "./components/CreateBase.vue"
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
-import EditIcon from "./components/icons/EditIcon.vue"
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const tableData: any[] = [
   {
@@ -76,7 +75,28 @@ const handleEdit = (index: number, row: any) => {
   console.log(index, row);
 };
 const handleDelete = (index: number, row: any) => {
-  console.log(index, row);
+  ElMessageBox.confirm(
+    '是否确认删除该知识库?',
+    '删除知识库',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      console.log(index, row);
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+    })
+    .catch(() => {
+      // ElMessage({
+      //   type: 'info',
+      //   message: 'Delete canceled',
+      // })
+    })
 };
 
 const baseVisible = ref(false)
@@ -137,7 +157,8 @@ const currentPage = ref(1)
                 </template>
                 </el-table-column>
             </el-table>
-            <div class="mt-5 flex justify-end">
+            <div class="mt-5 flex justify-between">
+                <el-text>共50个知识库</el-text>
                 <el-pagination
                     v-model:current-page="currentPage"
                     layout="prev, pager, next, jumper"

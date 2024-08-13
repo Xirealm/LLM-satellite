@@ -27,7 +27,7 @@ const newChat = () => {
     <div
       class="flex bg-white my-5 flex-col w-4/5 py-2 px-2 items-start rounded-md"
     >
-      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="newChat">
+      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md" @click="newChat">
         <span class="w-8"
           ><img src="../../assets/image/menu/talk.png" width="24" alt=""
         /></span>
@@ -55,3 +55,8 @@ const newChat = () => {
   </div>
   <History v-model="isHistoryOpen" />
 </template>
+<style scoped lang="scss">
+.is-active{
+  color: #01358e;
+}
+</style>

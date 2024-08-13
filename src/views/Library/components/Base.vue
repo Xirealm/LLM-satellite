@@ -87,7 +87,7 @@ const currentPage = ref(1)
               <el-button class="w-20" type="danger" plain>删除文件</el-button>
               <el-button class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
             </div>
-            <el-table :data="tableData">
+            <el-table :data="tableData" row-class-name="row">
               <el-table-column type="selection" />
               <el-table-column label="文件名称" prop="name" width="200">
                  <template #default="scope">

@@ -3,9 +3,13 @@
     ),
 );
 
-.el-dialog{
+.el-dialog , .el-message-box{
     border-radius: 10px;
     // width: 40vw;
+}
+
+.el-overlay{
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .el-overlay-dialog{

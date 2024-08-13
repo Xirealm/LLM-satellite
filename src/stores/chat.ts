@@ -1,14 +1,10 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { deleteQuestion, postSimilarText, source } from "@/services/qa";
-import type { Mode } from "@/types/qa.d.ts";
+import type { Mode , Chat } from "@/types/chat.d.ts";
 import { marked } from "@/utils/marked";
 import markdownToTxt from "markdown-to-txt";
-interface Answer {
-  content: string;
-  text: string;
-  status: string;
-}
+
 export const useChatStore = defineStore(
   "chat",
   () => {
@@ -22,15 +18,7 @@ export const useChatStore = defineStore(
       { label: "原始回答", value: "rawAnswer" },
     ]);
     const chatStatus = ref<"undo" | "doing" | "done">("undo");
-    const questionList = ref<
-      {
-        question: string;
-        rawAnswer: Answer;
-        enhancedAnswer: Answer;
-        similarText: Answer;
-        activeAnswer: "similarText" | "enhancedAnswer" | "rawAnswer";
-      }[]
-    >([]);
+    const questionList = ref<Chat[]>([]);
     //新建聊天
     const newQuestion = () => {
       questionList.value = [];
