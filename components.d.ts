@@ -41,9 +41,12 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     History: typeof import('./src/components/History.vue')['default']
     IconEdit: typeof import('./src/components/icons/IconEdit.vue')['default']
+    IconSet: typeof import('./src/components/icons/IconSet.vue')['default']
+    IconUpload: typeof import('./src/components/icons/IconUpload.vue')['default']
     Menu: typeof import('./src/components/Menu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SetPopup: typeof import('./src/components/SetPopup.vue')['default']
     Upload: typeof import('./src/components/Upload.vue')['default']
     UploadPopup: typeof import('./src/components/UploadPopup.vue')['default']
   }

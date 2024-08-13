@@ -92,7 +92,7 @@ const currentPage = ref(1)
               <el-table-column label="文件名称" prop="name" width="200">
                  <template #default="scope">
                       <EditText :index="scope.$index" v-model:text="scope.row.name">
-                        <el-link >{{ scope.row.name }}</el-link>   
+                        <el-text >{{ scope.row.name }}</el-text>   
                       </EditText>
                     </template>
               </el-table-column> 
@@ -102,6 +102,7 @@ const currentPage = ref(1)
               <template #default="scope">
                   <el-link
                     :underline="false"
+                    class="icon-delete"
                     @click="handleDelete(scope.$index, scope.row)"
                     >
                     <DeleteIcon />
@@ -121,4 +122,9 @@ const currentPage = ref(1)
   </el-dialog>
 </template>
 <style scoped lang="scss">
+.icon-delete {
+  &:hover {
+    color: var(--el-color-error)
+  }
+}
 </style>

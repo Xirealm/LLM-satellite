@@ -148,10 +148,10 @@ const currentPage = ref(1)
                 <el-table-column label="操作" align="center" width="100">
                 <template #default="scope">
                     <el-link
-                    :underline="false"
-                    class="icon-delete"
-                    @click="handleDelete(scope.$index, scope.row)"
-                    >
+                      :underline="false"
+                      class="icon-delete"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >
                     <DeleteIcon />
                   </el-link>
                 </template>
@@ -174,12 +174,13 @@ const currentPage = ref(1)
 .el-table .row {
   height: 50px;
 }
-.icon-delete{
-  &:hover{
-    color:var(--el-color-error)
-  }
-}
 // .library .el-input__wrapper{
 //   border-radius: 20px;
 // }
+
+.icon-delete {
+  &:hover {
+    color: var(--el-color-error)
+  }
+}
 </style>

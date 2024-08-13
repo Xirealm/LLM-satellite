@@ -11,6 +11,21 @@ const newChat = () => {
   chatStore.newQuestion();
   router.push("/index")
 };
+
+const value = ref('个人库1')
+
+const options = [
+  {
+    value: '个人库1',
+    label: '个人库1',
+    type: 'private'
+  },
+  {
+    value: '公共库1',
+    label: '公共库1',
+    type: 'public'
+  },
+]
 </script>
 
 <template>
@@ -51,6 +66,31 @@ const newChat = () => {
         /></span>
         <span class="text-sm">知识库</span>
       </button>
+    </div>
+    <div class="flex bg-white my-5 flex-col w-4/5 py-3 px-2 items-start rounded-md">
+      <span class="mb-2">
+        <el-text>当前对话知识库：</el-text>
+      </span>
+      <el-select
+        v-model="value"
+        placeholder="未选择"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+          <div class="flex justify-between items-center">
+            <el-text>{{ item.label }}</el-text>
+            <template v-if="item.type === 'private'">
+              <el-tag type="primary">个人库</el-tag>
+            </template>
+            <template v-else>
+              <el-tag type="warning">公共库</el-tag>
+            </template>
+          </div>
+        </el-option>
+      </el-select>
     </div>
   </div>
   <History v-model="isHistoryOpen" />

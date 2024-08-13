@@ -26,11 +26,11 @@ const isHistoryOpen = ref(false);
       <img src="../../assets/newChat.png" width="35" class="" />
     </button> -->
     <el-dropdown>
-      <button class="mr-6 bg-white rounded-full" @click="router.push('/login')"><img src="../../assets/user.png" width="36" alt=""></button>
+      <el-link :underline="false" class="mr-6 bg-white rounded-full"><img src="../../assets/user.png" width="36" alt=""></el-link>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>编辑信息</el-dropdown-item>
-          <el-dropdown-item divided>退出登录</el-dropdown-item>
+          <el-dropdown-item divided @click="router.push('/login')">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
