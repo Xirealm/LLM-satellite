@@ -30,7 +30,19 @@ const upload: UploadProps['onChange'] = (uploadFile) => {
   }
   fileList.value.push(uploadFile)  
 }
-//上传数据
+const isShare = ref(false)
+const sharePublicBase = ref('')
+const options = [
+  {
+    value: '公共库1',
+    label: '公共库1',
+  },
+  {
+    value: '公共库2',
+    label: '公共库2',
+  },
+]
+
 </script>
 
 <template>
@@ -58,6 +70,26 @@ const upload: UploadProps['onChange'] = (uploadFile) => {
           </span>
       </div>
     </el-scrollbar>
+    <div class="flex items-center" v-if="fileList.length > 0">
+      <el-text>是否将文件共享至公共库</el-text>
+      <el-radio-group v-model="isShare" class="ml-4">
+        <el-radio :value="false" size="large">否</el-radio>
+        <el-radio :value="true" size="large">是</el-radio>
+      </el-radio-group>
+    </div>
+    <el-form-item label="公共知识库名称" v-if="isShare">
+      <el-select
+        v-model="sharePublicBase"
+        placeholder="未选择"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </el-form-item>
 </template>
 <style scoped lang="scss">
 .file-item{

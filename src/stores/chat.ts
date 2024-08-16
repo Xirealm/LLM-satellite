@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import { deleteQuestion, postSimilarText, source } from "@/services/qa";
+import { deleteQuestion, postSimilarText, source } from "@/services/chat";
 import type { Mode , Chat } from "@/types/chat.d.ts";
 import { marked } from "@/utils/marked";
 import markdownToTxt from "markdown-to-txt";

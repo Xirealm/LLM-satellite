@@ -19,7 +19,7 @@ const handlePreview: UploadProps['onPreview'] = (file) => {
 
 <template>
 <!-- 上传语料弹窗 -->
-<el-dialog v-model="isShow" top="20vh" width="40vw" destroy-on-close title="上传文件":z-index="9999">
+<el-dialog v-model="isShow" top="20vh" width="40vw" destroy-on-close title="上传文件">
   <Upload />
   <template #footer>
     <el-button type="primary">上传</el-button>

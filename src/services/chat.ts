@@ -1,6 +1,6 @@
-import axios from "axios"
-import { http } from "../http"
-export let source:any
+import axios from "axios";
+import { http } from "../utils/http";
+export let source: any;
 /**
  * 获取相似文本
  * @param question 问题
@@ -16,7 +16,7 @@ export const postSimilarText = (question: string): any => {
       cancelToken: source.token,
     }
   );
-}
-export const deleteQuestion = ():any => {
-  return http.delete("/delete/")
-}
+};
+export const deleteQuestion = (): any => {
+  return http.delete("/delete/");
+};

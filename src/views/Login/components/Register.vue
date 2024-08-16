@@ -3,14 +3,14 @@ import { ref } from 'vue'
 import { useChatStore } from '@/stores/chat';
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
+import { postRegister } from '@/services/user';
 
 const chatStore = useChatStore();
 const router = useRouter()
 
 const registerData = ref({
-  phone: '',
+  account: '',
   username:'',
   password1: '',
   password2: '',
@@ -33,8 +33,15 @@ const upload:UploadProps['onChange'] = (uploadFile) => {
   console.log(imageUrl.value);
 }
 const status = defineModel('status')
-const register = () => {
-  status.value = 'login'
+const register = async () => {
+  const result = await postRegister(
+    registerData.value.account,
+    registerData.value.username,
+    registerData.value.password1,
+    registerData.value.password2
+  )
+  console.log(result);
+  
 }
 </script>
 <template>
@@ -49,16 +56,28 @@ const register = () => {
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload> -->
     <span class="flex justify-between w-full">
-      <el-link class="text-xs" @click="status = 'login'">返回登陆</el-link>
+      <el-link class="text-xs" @click="status = 'login'">  << 返回登陆</el-link>
       <span></span>
     </span>
-    <el-input v-model="registerData.phone" placeholder="请输入手机号" />
-    <el-input v-model="registerData.username" placeholder="请输入用户名" />
-    <el-input v-model="registerData.password1" placeholder="请输入登录密码" />
-    <el-input v-model="registerData.password2" placeholder="请再次输入登录密码" />
+    <el-form label-width="auto" label-position="left" class="w-full">
+      <el-form-item label="账号" class="w-full">
+      <el-input v-model="registerData.account" placeholder="请输入手机号" />
+      </el-form-item>
+      <el-form-item label="用户名" class="w-full">
+        <el-input v-model="registerData.username" placeholder="请输入用户名" />
+      </el-form-item>
+      <el-form-item label="设置密码" class="w-full">
+        <el-input v-model="registerData.password1" placeholder="请输入登录密码" />
+      </el-form-item>
+      <el-form-item label="确认密码" class="w-full">
+        <el-input v-model="registerData.password2" placeholder="请再次输入登录密码" />
+      </el-form-item>
+    </el-form>
     <div>
       <el-button 
-        round color="#01358e" size="large" @click="register">
+        :disabled="!registerData.username || !registerData.account || !registerData.password1 || !registerData.password2"
+        round color="#01358e" size="large" 
+        @click="register">
         <span class="px-4 text-md">注册</span>
       </el-button>
     </div>

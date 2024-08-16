@@ -20,7 +20,8 @@ const status = ref<"login" | "register">("login");
       </span>
     </div>
     <div class="flex flex-1 items-center justify-center">
-      <div class="bg-white flex flex-col items-center h-[36vh] w-2/5 justify-between p-10 rounded-xl">
+      <div 
+        class="bg-white flex flex-col items-center h-[35vh] w-2/5 justify-between px-10 py-6 rounded-xl border">
         <Login 
           v-if="status === 'login'" 
           v-model:status="status" />

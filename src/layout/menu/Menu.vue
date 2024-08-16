@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 import { useChatStore } from "@/stores/chat";
 import History from "@/components/History.vue";
+import BaseType from "@/components/BaseType.vue"
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
 
@@ -82,12 +83,7 @@ const options = [
           :value="item.value">
           <div class="flex justify-between items-center">
             <el-text>{{ item.label }}</el-text>
-            <template v-if="item.type === 'private'">
-              <el-tag type="primary">个人库</el-tag>
-            </template>
-            <template v-else>
-              <el-tag type="warning">公共库</el-tag>
-            </template>
+            <BaseType :type="item.type" />
           </div>
         </el-option>
       </el-select>
