@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import pinia from "@/stores/index";
+import { useUserStore } from '@/stores/user';
 
 const router = createRouter({
   // history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -6,6 +8,7 @@ const router = createRouter({
   routes: [
     {
       path: "/login",
+      name: "login",
       component: () => import("../views/Login/LoginView.vue"),
     },
     {
@@ -40,6 +43,13 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach(async (to, from) => {
+  const userStore = useUserStore(pinia);
+  if (userStore.user.account === "" && to.name !== "login") {
+    return "/login";
+  }
 });
 
 export default router

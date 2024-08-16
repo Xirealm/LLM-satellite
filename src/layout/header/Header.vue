@@ -3,9 +3,15 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter()
 import History from "@/components/History.vue";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
+const logout = () => {
+  userStore.logout()
+  router.push("/login")
+}
 </script>
 
 <template>
@@ -30,7 +36,7 @@ const isHistoryOpen = ref(false);
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>编辑信息</el-dropdown-item>
-          <el-dropdown-item divided @click="router.push('/login')">退出登录</el-dropdown-item>
+          <el-dropdown-item divided @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
