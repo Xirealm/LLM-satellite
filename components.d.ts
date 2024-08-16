@@ -8,8 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BaseType: typeof import('./src/components/BaseType.vue')['default']
+    DeleteIcon: typeof import('./src/components/icons/DeleteIcon.vue')['default']
     EditIcon: typeof import('./src/components/icons/EditIcon.vue')['default']
     EditText: typeof import('./src/components/EditText.vue')['default']
+    ElButto: typeof import('element-plus/es')['ElButto']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
@@ -44,6 +46,7 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     History: typeof import('./src/components/History.vue')['default']
+    IconDelete: typeof import('./src/components/icons/IconDelete.vue')['default']
     IconEdit: typeof import('./src/components/icons/IconEdit.vue')['default']
     IconSet: typeof import('./src/components/icons/IconSet.vue')['default']
     IconUpload: typeof import('./src/components/icons/IconUpload.vue')['default']

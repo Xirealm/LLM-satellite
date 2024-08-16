@@ -67,6 +67,12 @@ const options = [
         /></span>
         <span class="text-sm">知识库</span>
       </button>
+      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/fileRecords')">
+        <span class="w-8"
+          ><img src="../../assets/image/menu/base.png" width="20" alt=""
+        /></span>
+        <span class="text-sm">文件记录</span>
+      </button>
     </div>
     <div class="flex bg-white my-5 flex-col w-4/5 py-3 px-2 items-start rounded-md">
       <span class="mb-2">

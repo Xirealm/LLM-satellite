@@ -5,29 +5,44 @@ const userStore = useUserStore();
 import { UploadFilled } from "@element-plus/icons-vue";
 import Upload from "@/components/Upload.vue"
 import DeleteIcon from "./icons/DeleteIcon.vue"
-import { postCreateBase } from "@/services/base";
-
+import {
+  postCreatePersonalBaseAPI,
+  postCreatePublicBaseAPI,
+} from "@/services/base";
+import BaseType from "@/components/BaseType.vue";
 
 const uploadVisible = ref(false);
-const dialogVisible = defineModel();
+const dialogVisible = ref(false);
 
-const baseName = ref("");
-const synopsis = ref("");
-const baseType = ref('private')
+const emit = defineEmits(['created']);
+
 const base = reactive({
   name: "",
   synopsis: "",
-  type: "private",
+  type: "personal",
 });
 const createBase = async () => {
-  const result = await postCreateBase(userStore.user.account, base.name, base.synopsis)
+  let result
+  if (userStore.user.type === 'normal') {
+    result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
+  }
+  else if (userStore.user.type === 'admin') {
+    if (base.type === 'public') {
+      result = await postCreatePublicBaseAPI(base.name, base.synopsis)
+    } else if (base.type === 'personal') {
+      result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
+    }
+  }
   console.log(result);
-  
+  if (result.code === 200) {
+    dialogVisible.value = false
+    emit('created')
+  }  
 }
 
 const options = [
   {
-    value: 'private',
+    value: 'personal',
     label: '个人库',
   },
   {
@@ -35,6 +50,14 @@ const options = [
     label: '公共库',
   },
 ]
+
+const openCreateBaseDialog = () => {
+  dialogVisible.value = true
+}
+
+defineExpose({
+  openCreateBaseDialog
+})
 </script>
 
 <template>
@@ -44,16 +67,15 @@ const options = [
     :z-index="100"
   >
     <template #header>
-        <h2 class="text-lg font-semibold">创建知识库
-            <template v-if="base.type === 'private'">
-              <el-tag type="primary">个人库</el-tag>
-            </template>
-            <template v-else>
-              <el-tag type="warning">公共库</el-tag>
-            </template>
+        <h2 class="text-lg font-semibold">
+            创建知识库
+            <BaseType :type="base.type" />
         </h2>
     </template>
-    <!-- <el-form-item label="知识库类型">
+    <el-form-item 
+      v-if="userStore.user.type==='admin'"
+      label="知识库类型"
+    >
       <el-select
         v-model="base.type"
         placeholder="未选择"
@@ -65,7 +87,7 @@ const options = [
           :value="item.value">
         </el-option>
       </el-select>
-    </el-form-item> -->
+    </el-form-item>
     <el-form-item label="知识库名称">
       <el-input v-model="base.name" placeholder="请输入知识库名称"/>
     </el-form-item>

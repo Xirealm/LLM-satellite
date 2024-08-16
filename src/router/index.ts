@@ -40,6 +40,11 @@ const router = createRouter({
           path: "library",
           component: () => import("../views/Library/Library.vue"),
         },
+        {
+          name: "fileRecords",
+          path: "fileRecords",
+          component: () => import("../views/FileRecords/FileRecords.vue"),
+        },
       ],
     },
   ],

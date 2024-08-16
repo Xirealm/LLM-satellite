@@ -3,28 +3,28 @@ import { ref, nextTick } from 'vue'
 import IconEdit from "./icons/IconEdit.vue"
 
 const text = defineModel("text")
-const props = defineProps<{
-    index:number
-}>()
-const editBaseNameIndex = ref()
-const editBaseNameInput = ref()
+const isEditText = ref(false)
+const emit = defineEmits(['editFinish'])
+const editTextInput = ref()
 const editBaseNameInputBlur = () => {
     if(text.value === "") return
-    editBaseNameIndex.value = null
+    isEditText.value = false
+    emit('editFinish')
 }
 
-const editBaseNameInputFocus = async (index:any) => {
-  editBaseNameIndex.value = index
-  await nextTick()
-  editBaseNameInput.value.focus()
+const editBaseNameInputFocus = async (index: any) => {
+    isEditText.value = true
+    await nextTick()
+    editTextInput.value.focus()
 }
 </script>
 <template>
     <div class="group flex">
-        <el-input class="h-full" ref="editBaseNameInput" @blur="editBaseNameInputBlur" v-if="editBaseNameIndex === index" type="text" v-model="text"/>
+        <el-input class="h-full" ref="editTextInput" @blur="editBaseNameInputBlur" v-if="isEditText" type="text" v-model="text"/>
         <template v-else>
             <slot />
-            <button @click="editBaseNameInputFocus(index)" class="group-hover:block hidden ml-1">
+            <button 
+                @click="editBaseNameInputFocus" class="group-hover:block hidden ml-1">
                 <IconEdit />
             </button>
         </template>

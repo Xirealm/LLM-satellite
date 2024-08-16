@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive,onMounted } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
 import UploadPopup from "@/components/UploadPopup.vue"
 import DeleteIcon from "./icons/DeleteIcon.vue"
+import BaseType from "@/components/BaseType.vue"
 
 const uploadVisible = ref(false);
-const dialogVisible = defineModel();
+const dialogVisible = ref(false);
+// const props = defineProps<{
+//   baseType: string;
+// }>()
 
 const library = ref("个人知识库1");
 
@@ -15,7 +19,6 @@ const handleEdit = (index: number, row: any) => {
 const handleDelete = (index: number, row: any) => {
   console.log(index, row);
 };
-
 const tableData: any[] = [
   {
     date: "2024-07-21 16:58",
@@ -69,6 +72,17 @@ const tableData: any[] = [
   },
 ];
 const currentPage = ref(1)
+const openBaseDialog = (name: string) => {
+  console.log("打开");
+  
+  console.log(name);
+  
+  dialogVisible.value = true
+}
+
+defineExpose({
+  openBaseDialog
+})
 </script>
 
 <template>
@@ -79,7 +93,7 @@ const currentPage = ref(1)
   >
     <template #header>
         <h2 class="text-lg font-semibold">{{library}}  
-          <el-tag type="primary">个人库</el-tag>
+          <BaseType :type="'personal'"/>
         </h2>
     </template>
         <div class="flex flex-col">

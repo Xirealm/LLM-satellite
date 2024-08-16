@@ -28,9 +28,12 @@ const login = async () => {
         // console.log(userStore.user);
         ElMessage({
             type: 'success',
-            message: '登录成功'
+            message: '登录成功',
+            duration: 1000
         })
-        router.push('/index')
+        setTimeout(() => {
+            router.push('/index')
+        }, 1000)
     } else {
         ElMessage({
             type: 'error',
@@ -58,3 +61,10 @@ const login = async () => {
         <span class="px-4 text-md">登录</span>
     </el-button>
 </template>
+
+<style scoped lang='scss'>
+.el-form-item__label{
+    font-size: 30px;
+}
+
+</style>

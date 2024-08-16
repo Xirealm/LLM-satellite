@@ -4,7 +4,7 @@ defineProps < {
 }>()
 </script>
 <template>
-    <template v-if="type === 'private'">
+    <template v-if="type === 'personal'">
         <el-tag type="primary">个人库</el-tag>
     </template>
     <template v-else-if="type === 'public'">

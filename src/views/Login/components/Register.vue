@@ -41,6 +41,9 @@ const register = async () => {
     registerData.value.password2
   )
   console.log(result);
+  if (result.code == 200) {
+    status.value = 'login'
+  }
   
 }
 </script>
@@ -56,7 +59,9 @@ const register = async () => {
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
     </el-upload> -->
     <span class="flex justify-between w-full">
-      <el-link class="text-xs" @click="status = 'login'">  << 返回登陆</el-link>
+      <el-link class="text-xs decoration-slice" @click="status = 'login'" type="primary"> 
+        << 返回
+      </el-link>
       <span></span>
     </span>
     <el-form label-width="auto" label-position="left" class="w-full">
