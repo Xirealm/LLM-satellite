@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref , onMounted} from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import { useChatStore } from "@/stores/chat";
+import { getAllBaseOptionAPI } from "@/services/base";
 import History from "@/components/History.vue";
 import BaseType from "@/components/BaseType.vue"
 const chatStore = useChatStore();
@@ -13,20 +14,22 @@ const newChat = () => {
   router.push("/index")
 };
 
-const value = ref('个人库1')
-
-const options = [
-  {
-    value: '个人库1',
-    label: '个人库1',
-    type: 'private'
-  },
-  {
-    value: '公共库1',
-    label: '公共库1',
-    type: 'public'
-  },
-]
+const value = ref()
+onMounted(async () => {
+  const res = await getAllBaseOptionAPI()
+  options.value = res.data.map((item: any) => {
+    return {
+      value: item.pid,
+      label: item.name,
+      type:  item.type,
+    }
+  })
+})
+const options = ref<{
+  value: string,
+  label: string,
+  type: string
+}[]>()
 </script>
 
 <template>
@@ -69,9 +72,9 @@ const options = [
       </button>
       <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/fileRecords')">
         <span class="w-8"
-          ><img src="../../assets/image/menu/base.png" width="20" alt=""
+          ><img src="../../assets/image/menu/history.png" width="20" alt=""
         /></span>
-        <span class="text-sm">文件记录</span>
+        <span class="text-sm">上传记录</span>
       </button>
     </div>
     <div class="flex bg-white my-5 flex-col w-4/5 py-3 px-2 items-start rounded-md">
@@ -88,7 +91,7 @@ const options = [
           :label="item.label"
           :value="item.value">
           <div class="flex justify-between items-center">
-            <el-text>{{ item.label }}</el-text>
+            <el-text size="small">{{ item.label }}</el-text>
             <BaseType :type="item.type" />
           </div>
         </el-option>

@@ -4,7 +4,6 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 import { UploadFilled } from "@element-plus/icons-vue";
 import Upload from "@/components/Upload.vue"
-import DeleteIcon from "./icons/DeleteIcon.vue"
 import {
   postCreatePersonalBaseAPI,
   postCreatePublicBaseAPI,

@@ -4,12 +4,17 @@ import { useRouter,RouterView } from "vue-router"
 const router = useRouter()
 import { UploadFilled } from "@element-plus/icons-vue";
 import EditText from "@/components/EditText.vue"
+import BaseType from "@/components/BaseType.vue"
 import Base from "./components/Base.vue"
 import CreateBase from "./components/CreateBase.vue"
+
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
+import CheckFileDialog from "./components/CheckFileDialog.vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
-import BaseType from "@/components/BaseType.vue"
 import { GetBaseListAPI,GetAllFileRecordsAPI} from "@/services/base";
+
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 const tableData = ref();
 const currentPage = ref(1)
@@ -19,21 +24,11 @@ const getBaseList = async () => {
   const result = await GetBaseListAPI(currentPage.value)
   tableData.value = result.data
   baseTotal.value = result.total_num
-  // console.log(tableData.value)
-}
-
-const GetAllFileRecords = async () => {
-  const result = await GetAllFileRecordsAPI(currentPage.value)
-  console.log(result);
-  
-  // tableData.value = result.data
-  // baseTotal.value = result.total_num
-  // console.log(tableData.value)
+  console.log(tableData.value)
 }
 
 onMounted(() => {
   getBaseList()
-  GetAllFileRecords()
 })
 const handleEdit = (index: number, row: any) => {
   console.log(index, row);
@@ -63,8 +58,8 @@ const handleDelete = (index: number, row: any) => {
     })
 };
 const baseDialog = ref();
-const openBaseDialog = (name:string) => {
-    baseDialog.value.openBaseDialog(name)
+const openBaseDialog = (data:any) => {
+    baseDialog.value.openBaseDialog(data.pid,data.name,data.type)
 }
 
 const createBaseDialog = ref()
@@ -74,6 +69,11 @@ const createBase = (name:string) => {
 const createdBase = () => {
   getBaseList()
 }
+const checkFileDialog = ref()
+const checkFile = () => {
+  checkFileDialog.value.openCheckFileDialog()
+}
+
 </script>
 
 <template>
@@ -83,6 +83,9 @@ const createdBase = () => {
     </div>
         <div class="flex justify-end mb-5">
           <!-- <el-input style="width: 300px;"></el-input> -->
+          <el-button 
+            v-if="userStore.user.type === 'admin'"
+            @click = "checkFile" size="large" round type="warning">审核共享文件</el-button>
           <el-button @click="createBase" size="large" round color="#01358e">创建知识库</el-button>
         </div>
         <div class="flex flex-col p-5 bg-white rounded-xl shadow-xl">
@@ -91,11 +94,11 @@ const createdBase = () => {
                   <template #default="scope">
                     <EditText 
                       v-model:text="scope.row.name">
-                      <el-link @click="openBaseDialog(scope.row.pid)" type="primary">{{ scope.row.name }}</el-link>   
+                      <el-link @click="openBaseDialog(scope.row)" type="primary">{{ scope.row.name }}</el-link>   
                     </EditText>
                   </template>
                 </el-table-column> 
-                <el-table-column label="类型" prop="type" align="center"  width="100">
+                <el-table-column label="类型" prop="type" align="center" width="100">
                   <template #default="scope">
                     <BaseType :type="scope.row.type" />
                   </template>
@@ -138,6 +141,7 @@ const createdBase = () => {
   </div>
   <CreateBase ref="createBaseDialog" @created="createdBase"/>
   <Base ref="baseDialog"/>
+  <CheckFileDialog ref="checkFileDialog"/>
 </template>
 <style lang="scss">
 .el-table .row {

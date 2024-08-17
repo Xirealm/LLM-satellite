@@ -19,7 +19,6 @@ export const postCreatePersonalBaseAPI = (
 };
 /**
  * POST 新建公共知识库
- * 
  * @param
  */
 export const postCreatePublicBaseAPI = (
@@ -47,6 +46,28 @@ export const GetBaseListAPI = (
   });
 };
 /**
+ * GET 获取全部知识库名称及id
+ * @param
+ */
+export const getAllBaseOptionAPI = (): any => {
+  return http.get("/api/db/all/kdbs", {
+    params: {
+      account: userStore.user.account,
+    },
+  });
+};
+/**
+ * GET 获取全部公共知识库名称及id
+ * @param
+ */
+export const getPublicBaseOptionAPI = (): any => {
+  return http.get("/api/db/pub/info", {
+    params: {
+      account: userStore.user.account,
+    },
+  });
+};
+/**
  * GET 获取所有文件记录
  * @param
  */
@@ -55,7 +76,21 @@ export const GetAllFileRecordsAPI = (
 ): any => {
   return http.get("/api/db/psl/filerecords", {
     params: {
-      page: 1,
+      page: page,
+      account: userStore.user.account,
+    },
+  });
+};
+/**
+ * GET 获取文件审核列表
+ * @param
+ */
+export const GetCheckFileListAPI = (
+  page: number,
+): any => {
+  return http.get("/api/db/pub/check", {
+    params: {
+      page: page,
       account: userStore.user.account,
     },
   });

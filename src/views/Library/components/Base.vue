@@ -4,6 +4,9 @@ import { UploadFilled } from "@element-plus/icons-vue";
 import UploadPopup from "@/components/UploadPopup.vue"
 import DeleteIcon from "./icons/DeleteIcon.vue"
 import BaseType from "@/components/BaseType.vue"
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const uploadVisible = ref(false);
 const dialogVisible = ref(false);
@@ -11,7 +14,11 @@ const dialogVisible = ref(false);
 //   baseType: string;
 // }>()
 
-const library = ref("个人知识库1");
+const base = ref({
+  id:"",
+  name: "",
+  type:""
+});
 
 const handleEdit = (index: number, row: any) => {
   console.log(index, row);
@@ -72,14 +79,14 @@ const tableData: any[] = [
   },
 ];
 const currentPage = ref(1)
-const openBaseDialog = (name: string) => {
+const openBaseDialog = (id:string,name: string,type:string) => {
   console.log("打开");
-  
-  console.log(name);
-  
+  console.log(id, name, type);
+  base.value.id = id
+  base.value.name = name
+  base.value.type = type
   dialogVisible.value = true
 }
-
 defineExpose({
   openBaseDialog
 })
@@ -92,14 +99,17 @@ defineExpose({
     :z-index="100"
   >
     <template #header>
-        <h2 class="text-lg font-semibold">{{library}}  
-          <BaseType :type="'personal'"/>
+        <h2 class="text-lg font-semibold">
+          {{base.name}}  
+          <BaseType :type="base.type"/>
         </h2>
     </template>
         <div class="flex flex-col">
             <div class="flex justify-end">
               <el-button class="w-20" type="danger" plain>删除文件</el-button>
-              <el-button class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
+              <el-button 
+                v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'" 
+                class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
             </div>
             <el-table :data="tableData" row-class-name="row">
               <el-table-column type="selection" />
@@ -132,7 +142,7 @@ defineExpose({
                 />
             </div>
         </div>
-        <upload-popup v-model:isShow="uploadVisible" />
+        <upload-popup v-model:isShow="uploadVisible" :base="base"/>
   </el-dialog>
 </template>
 <style scoped lang="scss">
