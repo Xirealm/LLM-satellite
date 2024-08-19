@@ -35,5 +35,11 @@ export const postUploadToPublicFromAdminAPI = (
     formData.append("pid", pid);
     formData.append("file", file);
     formData.append("account", userStore.user.account);
-    return http.post("/api/db/pub/upload", formData);
+    return http.post("/api/db/pub/upload", formData, {
+      onUploadProgress: function (progressEvent) {
+        // 处理原生进度事件
+        console.log(progressEvent);
+        
+      },
+    });
 };

@@ -9,14 +9,12 @@ const userStore = useUserStore()
 import { postUploadAPI,postUploadToPublicFromAdminAPI } from "@/services/upload";
 import { getPublicBaseOptionAPI } from "@/services/base";
 const props = defineProps<{
-  base: {
+  base?: {
     id: string,
     name: string,
     type:string
   }
 }>()
-console.log(props.base.id);
-
 const fileList = ref<UploadFile[]>([])
 const fileSizeFormat = (size: number) => {
   if (size < 1024) return size + 'B'
@@ -44,7 +42,6 @@ const handleChange: UploadProps['onChange'] = (uploadFile) => {
   }
   fileList.value.push(uploadFile)  
 }
-const isShare = ref(false)
 const options = ref<{
   value: string,
   label: string,
@@ -61,21 +58,22 @@ onMounted(async () => {
   })
 })
 const data = ref<any>({
-  pid:props.base.id,
+  pid:props.base?.id,
   is_share: false,
   account: userStore.user.account,
-  sid:"pub_0816213908"
+  sid:null
 })
-const submit = () => {
+const submit = async () => {
   console.log(data.value);
-  try {
-    if (userStore.user.type === 'admin' && props.base.type === 'public') {
-      postUploadToPublicFromAdminAPI(data.value.pid,fileList.value[0].raw as File)
-    } else {
-      postUploadAPI(data.value.pid, data.value.is_share, data.value.sid, fileList.value[0].raw as File)  
-    }
+  let result:any
+  if (userStore.user.type === 'admin' && props.base?.type === 'public') {
+    result = await postUploadToPublicFromAdminAPI(data.value.pid,fileList.value[0].raw as File)
+  } else {
+    result = await postUploadAPI(data.value.pid, data.value.is_share, data.value.sid, fileList.value[0].raw as File)  
+  }
+  if (result.code === 200) {
     ElMessage({type: 'success',message: '上传成功',duration: 1000})
-  } catch {
+  } else {
     ElMessage({type: 'error',message: '上传失败',duration: 1000})
   }
 }
@@ -109,11 +107,13 @@ defineExpose({
           </span>
       </div>
     </el-scrollbar>
-    <div class="flex items-center" v-if="fileList.length > 0">
+    <div 
+      v-if="props.base?.type === 'personal' && fileList.length > 0"
+      class="flex items-center">
       <el-text>是否将文件共享至公共库</el-text>
       <el-radio-group v-model="data.is_share" class="ml-4">
-        <el-radio :value="false" size="large">否</el-radio>
-        <el-radio :value="true" size="large">是</el-radio>
+        <el-radio :value="'False'" size="large">否</el-radio>
+        <el-radio :value="'True'" size="large">是</el-radio>
       </el-radio-group>
     </div>
     <el-form-item label="公共知识库名称" v-if="data.is_share">

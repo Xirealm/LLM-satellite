@@ -2,12 +2,15 @@
 import { ref , onMounted} from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 import { useChatStore } from "@/stores/chat";
 import { getAllBaseOptionAPI } from "@/services/base";
 import History from "@/components/History.vue";
 import BaseType from "@/components/BaseType.vue"
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
+
 
 const newChat = () => {
   chatStore.newQuestion();
@@ -68,7 +71,8 @@ const options = ref<{
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
-        <span class="text-sm">知识库</span>
+        <span class="text-sm" v-if="userStore.user.type === 'admin'">知识库管理</span>
+        <span class="text-sm" v-else>知识库</span>
       </button>
       <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/fileRecords')">
         <span class="w-8"

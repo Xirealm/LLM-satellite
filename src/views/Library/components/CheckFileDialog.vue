@@ -1,34 +1,38 @@
 <script setup lang="ts">
-import { ref, reactive,onMounted } from "vue";
-import { UploadFilled } from "@element-plus/icons-vue";
+import { ref, reactive,onMounted,watch } from "vue";
 import UploadPopup from "@/components/UploadPopup.vue"
-import DeleteIcon from "./icons/DeleteIcon.vue"
-import BaseType from "@/components/BaseType.vue"
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 import {
-  GetCheckFileListAPI
+  getCheckFileListAPI,
+  patchCheckFileAPI
 } from "@/services/base";
-const uploadVisible = ref(false);
 const dialogVisible = ref(false);
 
-const handleDelete = (index: number, row: any) => {
-  console.log(index, row);
-};
 const tableData= ref([])
 const currentPage = ref(1)
 const checkFileTotal = ref(0)
 
-const GetCheckFileList = async () => {
-  const res = await GetCheckFileListAPI(currentPage.value)
+const getCheckFileList = async () => {
+  const res = await getCheckFileListAPI(currentPage.value)
   tableData.value = res.data
   checkFileTotal.value = res.total_num
   console.log(res);
+  
 }
+const handleCheckFile = async (operate:boolean,pid: string, fid: string) => {
+    const res = await patchCheckFileAPI(operate, pid, fid)
+    console.log(res);
+    getCheckFileList()
+}
+
+watch(currentPage, () => {
+    getCheckFileList()
+})
 
 const openCheckFileDialog = () => {
   dialogVisible.value = true
-  GetCheckFileList()
+  getCheckFileList()
 }
 
 defineExpose({
@@ -56,27 +60,30 @@ defineExpose({
               <el-table-column label="文件名称" prop="file_name">
                  <template #default="scope">
                       <EditText :index="scope.$index" v-model:text="scope.row.file_name">
-                        <el-text >{{ scope.row.file_name }}</el-text>   
+                            <el-link :href="scope.row.f_url" target="_blank" type="primary">
+                                {{ scope.row.file_name }}
+                            </el-link>
                       </EditText>
                     </template>
               </el-table-column> 
               <el-table-column label="公共知识库" prop="share_collection" align="center"/>
               <el-table-column label="状态" prop="status" width="100" align="center">
                  <template #default="scope">
-                    <el-tag v-if="scope.row.status === 'pending'">待审核</el-tag>   
-                    <el-tag v-else>已审核</el-tag>   
+                    <el-tag v-if="scope.row.status === 'pending'" round type="warning">待审核</el-tag>   
+                    <el-tag v-else round>已审核</el-tag>   
                 </template>
               </el-table-column> 
               <el-table-column label="上传用户" prop="username" align="center"/>
               <el-table-column label="上传时间" prop="upload_time" align="center" width="200"/>
-              <el-table-column label="操作" align="center" width="200">
+              <el-table-column label="审核" align="center" width="200">
               <template #default="scope">
-                <template v-if="scope.row.is_upload === '未知'">
-                    <el-button class="w-20" type="primary">通过</el-button>
-                    <el-button class="w-20" type="danger">拒绝</el-button>
+                <template v-if="scope.row.status === 'pending'">
+                    <el-button class="w-20" type="primary" @click="handleCheckFile(true,scope.row.pid,scope.row.fid)">通过</el-button>
+                    <el-button class="w-20" type="danger" @click="handleCheckFile(false,scope.row.pid,scope.row.fid)">拒绝</el-button>
                 </template>
                 <template v-else>
-                    <el-tag>{{ scope.row.is_upload }}</el-tag>
+                    <el-tag v-if="scope.row.is_upload ==='True'" type="success" size="large">通过</el-tag>
+                    <el-tag v-else type="danger" size="large">拒绝</el-tag>
                 </template>
               </template>
               </el-table-column>
@@ -90,7 +97,6 @@ defineExpose({
                 />
             </div>
         </div>
-        <upload-popup v-model:isShow="uploadVisible" />
   </el-dialog>
 </template>
 <style scoped lang="scss">

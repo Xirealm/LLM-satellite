@@ -77,9 +77,12 @@ const checkFile = () => {
 </script>
 
 <template>
-  <div class="library w-[90vw] md:w-1/2 mx-auto">
+  <div class="library w-[90vw] md:w-[60vw] mx-auto">
     <div class="flex flex-col my-5">
-        <h2 class="text-lg font-semibold my-3">知识库</h2>
+        <h2 class="text-lg font-semibold my-3">
+          <span v-if="userStore.user.type === 'admin'">知识库管理</span>
+          <span v-else>知识库</span>
+        </h2>
     </div>
         <div class="flex justify-end mb-5">
           <!-- <el-input style="width: 300px;"></el-input> -->
@@ -93,9 +96,15 @@ const checkFile = () => {
                 <el-table-column label="知识库名称" prop="name" >
                   <template #default="scope">
                     <EditText 
+                      v-if="userStore.user.type === 'admin' || userStore.user.type === 'normal' && scope.row.type === 'personal'"
                       v-model:text="scope.row.name">
-                      <el-link @click="openBaseDialog(scope.row)" type="primary">{{ scope.row.name }}</el-link>   
+                      <el-link @click="openBaseDialog(scope.row)" type="primary">
+                        {{ scope.row.name }}
+                      </el-link>   
                     </EditText>
+                      <el-link v-else @click="openBaseDialog(scope.row)" type="primary">
+                        {{ scope.row.name }}
+                      </el-link>   
                   </template>
                 </el-table-column> 
                 <el-table-column label="类型" prop="type" align="center" width="100">

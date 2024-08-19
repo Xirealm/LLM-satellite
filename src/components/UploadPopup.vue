@@ -7,7 +7,7 @@ import { ElMessage } from 'element-plus'
 const isShow = defineModel('isShow')
 
 const props=defineProps<{
-  base: {
+  base?: {
     id: string,
     name: string,
     type:string
@@ -21,9 +21,9 @@ const handlePreview: UploadProps['onPreview'] = (file) => {
 }
 
 const upload = ref()
-const handleUpload = () => {
+const handleUpload = async() => {
   console.log(upload.value.fileList);
-  upload.value.submit()
+  await upload.value.submit()
   isShow.value = false
 }
 //上传数据

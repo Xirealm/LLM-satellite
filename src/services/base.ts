@@ -68,10 +68,10 @@ export const getPublicBaseOptionAPI = (): any => {
   });
 };
 /**
- * GET 获取所有文件记录
+ * GET 获取所有普通用户文件上传记录
  * @param
  */
-export const GetAllFileRecordsAPI = (
+export const getAllFileRecordsAPI = (
   page: number,
 ): any => {
   return http.get("/api/db/psl/filerecords", {
@@ -82,10 +82,24 @@ export const GetAllFileRecordsAPI = (
   });
 };
 /**
+ * GET 获取超管所有文件上传记录
+ * @param
+ */
+export const getAdminFileRecordsAPI = (
+  page: number,
+): any => {
+  return http.get("/api/db/adm/filerecords", {
+    params: {
+      page: page,
+      account: userStore.user.account,
+    },
+  });
+};
+/**
  * GET 获取文件审核列表
  * @param
  */
-export const GetCheckFileListAPI = (
+export const getCheckFileListAPI = (
   page: number,
 ): any => {
   return http.get("/api/db/pub/check", {
@@ -93,5 +107,21 @@ export const GetCheckFileListAPI = (
       page: page,
       account: userStore.user.account,
     },
+  });
+};
+/**
+ * PATCH 审核文件
+ * @param
+ */
+export const patchCheckFileAPI = (
+  operate: boolean,
+  pid: string,
+  fid: string,
+): any => {
+  return http.patch("/api/db/pub/operate", {
+    operate: operate,
+    account: userStore.user.account,
+    pid: pid,
+    fid: fid
   });
 };

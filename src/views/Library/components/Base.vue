@@ -105,14 +105,17 @@ defineExpose({
         </h2>
     </template>
         <div class="flex flex-col">
-            <div class="flex justify-end">
+            <div 
+              v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'"  
+              class="flex justify-end">
               <el-button class="w-20" type="danger" plain>删除文件</el-button>
-              <el-button 
-                v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'" 
-                class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
+              <el-button class="w-20" type="primary" @click="uploadVisible = true;">上传文件</el-button>
             </div>
             <el-table :data="tableData" row-class-name="row">
-              <el-table-column type="selection" />
+              <el-table-column 
+                v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'"   
+                type="selection" 
+              />
               <el-table-column label="文件名称" prop="name" width="200">
                  <template #default="scope">
                       <EditText :index="scope.$index" v-model:text="scope.row.name">
@@ -122,16 +125,18 @@ defineExpose({
               </el-table-column> 
               <el-table-column label="状态" prop="status" align="center"/>
               <el-table-column label="上传时间" prop="date" align="center"/>
-              <el-table-column label="操作" align="center">
-              <template #default="scope">
-                  <el-link
-                    :underline="false"
-                    class="icon-delete"
-                    @click="handleDelete(scope.$index, scope.row)"
-                    >
-                    <DeleteIcon />
-                  </el-link>
-              </template>
+              <el-table-column 
+                v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'"   
+                label="操作" align="center">
+                <template #default="scope">
+                    <el-link
+                      :underline="false"
+                      class="icon-delete"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >
+                      <DeleteIcon />
+                    </el-link>
+                </template>
               </el-table-column>
             </el-table>
             <div class="mt-5 flex justify-end">
