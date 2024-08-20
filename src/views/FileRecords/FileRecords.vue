@@ -64,14 +64,15 @@ watch(currentPage, () => {
           </el-table-column>
           <el-table-column label="结果" prop="status" align="center" width="100">
             <template #default="scope">
-              <el-tag v-if="scope.row.status === 'success'" type="success">上传成功</el-tag>
-              <el-tag v-else-if="scope.row.status === 'failure'" type="danger">上传失败</el-tag>
+              <el-tag v-if="scope.row.status === 'success'" type="success">入库成功</el-tag>
+              <el-tag v-else-if="scope.row.status === 'failure'" type="danger">入库失败</el-tag>
+              <el-tag v-else type="warning">转换中</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="上传时间" prop="upload_time" width="180"/>
         </el-table>
         <div class="mt-5 flex justify-between">
-          <el-text>共{{baseTotal}}个文件</el-text>
+          <el-text>共{{baseTotal}}条文件上传记录</el-text>
           <el-pagination
             v-model:current-page="currentPage"
             layout="prev, pager, next, jumper"

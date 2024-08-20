@@ -60,9 +60,9 @@ defineExpose({
               <el-table-column label="文件名称" prop="file_name">
                  <template #default="scope">
                       <EditText :index="scope.$index" v-model:text="scope.row.file_name">
-                            <el-link :href="scope.row.f_url" target="_blank" type="primary">
-                                {{ scope.row.file_name }}
-                            </el-link>
+                        <el-link :href="scope.row.f_url" target="_blank" type="primary">
+                            {{ scope.row.file_name }}
+                        </el-link>
                       </EditText>
                     </template>
               </el-table-column> 

@@ -3,7 +3,6 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 /**
  * POST 新建个人知识库
- * 
  * @param name 知识库名称
  * @param synopsis 知识库简介
  */
@@ -35,7 +34,7 @@ export const postCreatePublicBaseAPI = (
  * GET 获取知识库列表
  * @param
  */
-export const GetBaseListAPI = (
+export const getBaseListAPI = (
   page: number,
 ): any => {
   return http.get("/api/db/both/kdbrecords", {
@@ -123,5 +122,37 @@ export const patchCheckFileAPI = (
     account: userStore.user.account,
     pid: pid,
     fid: fid
+  });
+};
+/**
+ * GET 获取个人知识库文件
+ * @param
+ */
+export const getPersonalFileAPI = (
+  page: number,
+  pid:string
+): any => {
+  return http.get("/api/db/psl/kbasefiles", {
+    params: {
+      page: page,
+      account: userStore.user.account,
+      pid: pid,
+    },
+  });
+};
+/**
+ * PATCH 知识库重命名
+ * @param
+ */
+export const patchRenameBaseAPI = (
+  new_nickname: string,
+  pid: string,
+  type: string
+): any => {
+  return http.patch("/api/db/both/renamekbase", {
+    new_nickname: new_nickname,
+    account: userStore.user.account,
+    pid: pid,
+    type: type,
   });
 };

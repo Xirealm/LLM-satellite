@@ -124,13 +124,7 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
               </button>
             </div>
             <div class="absolute right-0 top-0 flex gap-2">
-              <span
-                @click="
-                  copyText(
-                    chatStore.questionList[index][item.activeAnswer].text
-                  )
-                "
-              >
+              <span @click="copyText(chatStore.questionList[index][item.activeAnswer].text)">
                 <IconCopy />
               </span>
               <span><IconLike /></span>

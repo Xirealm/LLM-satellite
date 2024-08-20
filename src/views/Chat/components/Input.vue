@@ -5,6 +5,7 @@ import UploadPopup from "@/components/UploadPopup.vue";
 import SetPopup from "@/components/SetPopup.vue";
 import IconSet from "@/components/icons/IconSet.vue"
 import IconUpload from "@/components/icons/IconUpload.vue"
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const chatStore = useChatStore();
 const input = ref("");
@@ -20,6 +21,14 @@ const sendQuestion = async () => {
   const question = input.value as string;
   input.value = "";
   if (question === "" || chatStore.chatStatus === "doing") return;
+  if (chatStore.currentBase === "" && chatStore.chatMode !== "rawAnswer") {
+    ElMessage({
+      type: 'error',
+      message: '当前未选择对话知识库',
+      duration:1000
+    })
+    return
+  }
   chatStore.questionList.push({
     question: question,
     rawAnswer: { content: "", text: "", status: "undo" },

@@ -17,9 +17,8 @@ const newChat = () => {
   router.push("/index")
 };
 
-const value = ref()
 onMounted(async () => {
-  const res = await getAllBaseOptionAPI()
+  const res = await getAllBaseOptionAPI()  
   options.value = res.data.map((item: any) => {
     return {
       value: item.pid,
@@ -86,7 +85,7 @@ const options = ref<{
         <el-text>当前对话知识库：</el-text>
       </span>
       <el-select
-        v-model="value"
+        v-model="chatStore.currentBase"
         placeholder="未选择"
       >
         <el-option

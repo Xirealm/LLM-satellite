@@ -4,6 +4,8 @@ import { deleteQuestion, postSimilarText, source } from "@/services/chat";
 import type { Mode , Chat } from "@/types/chat.d.ts";
 import { marked } from "@/utils/marked";
 import markdownToTxt from "markdown-to-txt";
+import { useUserStore } from "./user";
+const userStore = useUserStore();
 
 export const useChatStore = defineStore(
   "chat",
@@ -19,7 +21,7 @@ export const useChatStore = defineStore(
     ]);
     const chatStatus = ref<"undo" | "doing" | "done">("undo");
     const questionList = ref<Chat[]>([]);
-    //新建聊天
+    const currentBase = ref("")
     const newQuestion = () => {
       questionList.value = [];
     };
@@ -45,13 +47,22 @@ export const useChatStore = defineStore(
         return;
       }
       if (mode === "enhancedAnswer") {
-        ws.value = new WebSocket("ws://47.100.198.147:7001/api/enhance_socket");
+        ws.value = new WebSocket(
+          "ws://39e0775c.r29.cpolar.top/api/enhance_socket"
+        );
       } else if (mode === "rawAnswer") {
-        ws.value = new WebSocket("ws://47.100.198.147:7001/api/raw_socket");
+        ws.value = new WebSocket("ws://39e0775c.r29.cpolar.top/api/raw_socket");
       }
       const sendMessage = () => {
         if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-          ws.value.send(`{ "query":"${question}" }`);
+          ws.value.send(
+            `{ 
+              "query":"${question}",
+              "account":"${userStore.user.account}",
+              "pid":"${currentBase.value}",
+              "type":"${userStore.user.type}"
+            }`
+          );
         } else {
           console.error("WebSocket is not connected");
         }
@@ -101,6 +112,7 @@ export const useChatStore = defineStore(
     return {
       title,
       ws,
+      currentBase,
       chatMode,
       chatStatus,
       modeList,

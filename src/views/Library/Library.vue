@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive,onMounted,nextTick } from "vue";
-import { useRouter,RouterView } from "vue-router"
-const router = useRouter()
-import { UploadFilled } from "@element-plus/icons-vue";
+import { ref , reactive , onMounted, watch} from "vue";
 import EditText from "@/components/EditText.vue"
 import BaseType from "@/components/BaseType.vue"
 import Base from "./components/Base.vue"
@@ -11,7 +8,7 @@ import CreateBase from "./components/CreateBase.vue"
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
 import CheckFileDialog from "./components/CheckFileDialog.vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { GetBaseListAPI,GetAllFileRecordsAPI} from "@/services/base";
+import { getBaseListAPI , patchRenameBaseAPI } from "@/services/base";
 
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
@@ -21,7 +18,7 @@ const currentPage = ref(1)
 const baseTotal = ref(0)
 
 const getBaseList = async () => {
-  const result = await GetBaseListAPI(currentPage.value)
+  const result = await getBaseListAPI(currentPage.value)
   tableData.value = result.data
   baseTotal.value = result.total_num
   console.log(tableData.value)
@@ -30,9 +27,10 @@ const getBaseList = async () => {
 onMounted(() => {
   getBaseList()
 })
-const handleEdit = (index: number, row: any) => {
-  console.log(index, row);
-};
+watch(currentPage, () => {
+  getBaseList()
+})
+
 const handleDelete = (index: number, row: any) => {
   ElMessageBox.confirm(
     '是否确认删除该知识库?',
@@ -63,7 +61,7 @@ const openBaseDialog = (data:any) => {
 }
 
 const createBaseDialog = ref()
-const createBase = (name:string) => {
+const handleCreateBase = () => {
   createBaseDialog.value.openCreateBaseDialog()
 }
 const createdBase = () => {
@@ -72,6 +70,28 @@ const createdBase = () => {
 const checkFileDialog = ref()
 const checkFile = () => {
   checkFileDialog.value.openCheckFileDialog()
+}
+
+const renameBase = async (name:string,pid:string,type:string) => {
+  const result = await patchRenameBaseAPI(name, pid, type)
+  console.log(result);
+  if (result.code === 200) {
+    ElMessage({
+      message: '重命名成功',
+      type: 'success',
+      duration: 1000,
+      onClose: () => {
+        getBaseList()
+      }
+    })
+  } else {
+    getBaseList()
+    ElMessage({
+      message: '重命名失败',
+      type: 'error',
+      duration: 1000,
+    })    
+  }
 }
 
 </script>
@@ -89,7 +109,7 @@ const checkFile = () => {
           <el-button 
             v-if="userStore.user.type === 'admin'"
             @click = "checkFile" size="large" round type="warning">审核共享文件</el-button>
-          <el-button @click="createBase" size="large" round color="#01358e">创建知识库</el-button>
+          <el-button @click="handleCreateBase" size="large" round color="#01358e">创建知识库</el-button>
         </div>
         <div class="flex flex-col p-5 bg-white rounded-xl shadow-xl">
             <el-table :data="tableData" row-class-name="row" height="60vh">
@@ -97,14 +117,15 @@ const checkFile = () => {
                   <template #default="scope">
                     <EditText 
                       v-if="userStore.user.type === 'admin' || userStore.user.type === 'normal' && scope.row.type === 'personal'"
+                      @editFinish = "renameBase(scope.row.name,scope.row.pid,scope.row.type)"
                       v-model:text="scope.row.name">
                       <el-link @click="openBaseDialog(scope.row)" type="primary">
                         {{ scope.row.name }}
                       </el-link>   
                     </EditText>
-                      <el-link v-else @click="openBaseDialog(scope.row)" type="primary">
-                        {{ scope.row.name }}
-                      </el-link>   
+                    <el-link v-else @click="openBaseDialog(scope.row)" type="primary">
+                      {{ scope.row.name }}
+                    </el-link>   
                   </template>
                 </el-table-column> 
                 <el-table-column label="类型" prop="type" align="center" width="100">
