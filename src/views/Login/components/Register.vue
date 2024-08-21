@@ -42,6 +42,11 @@ const register = async () => {
   )
   console.log(result);
   if (result.code == 200) {
+    ElMessage({
+      type: 'success',
+      message: '注册成功',
+      duration:1000
+    })
     status.value = 'login'
   }
   

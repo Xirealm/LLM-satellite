@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useChatStore } from "@/stores/chat";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 import UploadPopup from "@/components/UploadPopup.vue";
 import SetPopup from "@/components/SetPopup.vue";
 import IconSet from "@/components/icons/IconSet.vue"
@@ -12,23 +14,39 @@ const input = ref("");
 
 const dialogFormVisible = ref(false);
 const feedData = () => {
+  if (chatStore.currentBase!.id === "") {
+    ElMessage({
+      type: 'error',
+      message: '尚未选择知识库',
+      duration:2000
+    })
+    return
+  }
+  if (userStore.user.type === 'normal' && chatStore.currentBase.type === 'public') {
+    ElMessage({
+      type: 'error',
+      message: '暂无权限将文件上传至公共知识库',
+      duration:2000
+    })
+    return
+  }
   dialogFormVisible.value = true;
 };
 
 // 发送问题
 const sendQuestion = async () => {
   console.log(input.value);
-  const question = input.value as string;
-  input.value = "";
-  if (question === "" || chatStore.chatStatus === "doing") return;
-  if (chatStore.currentBase === "" && chatStore.chatMode !== "rawAnswer") {
+  if (chatStore.currentBase!.id === "" && chatStore.chatMode !== "rawAnswer") {
     ElMessage({
       type: 'error',
-      message: '当前未选择对话知识库',
-      duration:1000
+      message: '尚未选择对话知识库',
+      duration:2000
     })
     return
   }
+  const question = input.value as string;
+  input.value = "";
+  if (question === "" || chatStore.chatStatus === "doing") return;
   chatStore.questionList.push({
     question: question,
     rawAnswer: { content: "", text: "", status: "undo" },
@@ -64,7 +82,7 @@ defineEmits(["sendQuestion"]);
         </button>
       </div>
       <div class="bg-white py-3 px-2 flex flex-between rounded-lg w-full">
-        <el-tooltip effect="light" content="投喂语料" placement="top">
+        <el-tooltip effect="light" content="文件上传" placement="top">
           <button
             @click="feedData"
             class="transition duration-300 ease-in-out scale-75 md:scale-100 text-white mr-1"
@@ -111,5 +129,5 @@ defineEmits(["sendQuestion"]);
     </div>
   </div>
   <!-- 上传语料弹窗 -->
-  <UploadPopup v-model:isShow="dialogFormVisible" />
+  <UploadPopup v-model:isShow="dialogFormVisible" :base="chatStore.currentBase" />
 </template>

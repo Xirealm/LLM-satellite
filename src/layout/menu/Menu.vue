@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref , onMounted} from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 const router = useRouter();
+const route = useRoute()
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 import { useChatStore } from "@/stores/chat";
@@ -11,14 +12,14 @@ import BaseType from "@/components/BaseType.vue"
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
 
-
 const newChat = () => {
   chatStore.newQuestion();
   router.push("/index")
 };
 
-onMounted(async () => {
+const getBaseOption = async() => {
   const res = await getAllBaseOptionAPI()  
+  console.log(res);
   options.value = res.data.map((item: any) => {
     return {
       value: item.pid,
@@ -26,17 +27,29 @@ onMounted(async () => {
       type:  item.type,
     }
   })
+}
+onMounted(() => {
+  getBaseOption()
 })
 const options = ref<{
   value: string,
   label: string,
   type: string
 }[]>()
+const baseSelectRef = ref()
+const changeBase = (value: string) => {
+  console.log(value);
+  const base = options.value?.find((item) => {
+    return item.value === value
+  })
+  chatStore.currentBase!.id = base!.value
+  chatStore.currentBase!.name = base!.label
+  chatStore.currentBase!.type = base!.type
+}
 </script>
-
 <template>
   <div
-    class="md:flex hidden bg-[#f2f2f2] w-[240px] h-full fixed flex-col items-center shadow-xl"
+    class="md:flex hidden bg-[#f2f2f2] w-[240px] h-full fixed flex-col items-center shadow-xl z-50"
   >
     <h2 class="flex items-center text-[#28449C] font-bold mt-8 mb-2">
       <img
@@ -48,7 +61,10 @@ const options = ref<{
     <div
       class="flex bg-white my-5 flex-col w-4/5 py-2 px-2 items-start rounded-md"
     >
-      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md" @click="newChat">
+      <button 
+        class="w-full flex items-center p-2 my-1 hover:bg-slate-100 rounded-md" 
+        @click="newChat"
+        :class="route.name === 'index' ? 'is-active bg-slate-100' : ''">
         <span class="w-8"
           ><img src="../../assets/image/menu/talk.png" width="24" alt=""
         /></span>
@@ -66,18 +82,24 @@ const options = ref<{
         /></span>
         <span class="text-sm">上传记录</span>
       </button> -->
-      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/library')">
+      <button 
+        class="w-full flex items-center p-2 my-1 hover:bg-slate-100 rounded-md " 
+        @click="router.push('/library')"
+        :class="route.name === 'library' ? 'is-active bg-slate-100' : ''">
         <span class="w-8"
           ><img src="../../assets/image/menu/base.png" width="20" alt=""
         /></span>
         <span class="text-sm" v-if="userStore.user.type === 'admin'">知识库管理</span>
         <span class="text-sm" v-else>知识库</span>
       </button>
-      <button class="w-full flex items-center p-2 hover:bg-slate-100 rounded-md " @click="router.push('/fileRecords')">
+      <button class="w-full flex items-center p-2 my-1 hover:bg-slate-100 rounded-md" 
+        :class="route.name === 'fileRecords' ? 'is-active bg-slate-100' : ''"
+        @click="router.push('/fileRecords')"
+        >
         <span class="w-8"
           ><img src="../../assets/image/menu/history.png" width="20" alt=""
         /></span>
-        <span class="text-sm">上传记录</span>
+        <span class="text-sm">文件记录</span>
       </button>
     </div>
     <div class="flex bg-white my-5 flex-col w-4/5 py-3 px-2 items-start rounded-md">
@@ -85,8 +107,10 @@ const options = ref<{
         <el-text>当前对话知识库：</el-text>
       </span>
       <el-select
-        v-model="chatStore.currentBase"
+        v-model="chatStore.currentBase!.id"
         placeholder="未选择"
+        ref="baseSelectRef"
+        @change="changeBase"
       >
         <el-option
           v-for="item in options"

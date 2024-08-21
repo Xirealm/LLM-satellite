@@ -4,7 +4,7 @@ import type { Mode } from "@/types/chat";
 import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
 import { copyText } from "@/utils/copyText";
-
+import { ElMessage, ElMessageBox } from 'element-plus'
 import IconCopy from "./icons/IconCopy.vue";
 import IconLike from "./icons/IconLike.vue";
 import IconDislike from "./icons/IconDislike.vue";
@@ -21,8 +21,9 @@ watch(
 );
 
 const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
-  console.log(question, mode, index);
-  console.log(chatStore.questionList[index][mode].status);
+  // console.log(question, mode, index);
+  // console.log(chatStore.questionList[index][mode].status);
+  // console.log("切换了");
   if (chatStore.questionList[index][mode].status !== "undo") return;
   chatStore.getAnswer(question, mode, index);
 };
@@ -39,9 +40,7 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
       class="md:w-1/2 w-11/12 mx-auto my-5 transition ease-in-out duration-200 relative"
     >
       <div class="mx-auto w-full md:w-[50vw] flex justify-end">
-        <div
-          class="bg-blue-500 rounded-lg text-white px-3 py-3 text-sm md:text-base"
-        >
+        <div class="bg-blue-500 rounded-lg text-white px-3 py-3 text-sm shadow-sm">
           <span>{{ item.question }}</span>
         </div>
         <img
@@ -51,16 +50,14 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
       </div>
       <div class="relative">
         <div
-          class="bg-white w-8 p-1 rounded-full absolute -left-10 top-14 hidden md:block shadow-md"
+          class="bg-white w-8 p-1 rounded-full absolute -left-10 top-14 hidden md:block shadow-sm"
         >
           <img src="../../../assets/image/satellite.svg" />
         </div>
         <el-tabs
           v-model="item.activeAnswer"
           class="mx-auto md:w-[50vw]"
-          @tab-change="
-            changeActiveAnswer(item.question, item.activeAnswer, index)
-          "
+          @tab-change="changeActiveAnswer(item.question, item.activeAnswer, index)"
         >
           <el-tab-pane
             :disabled="chatStore.chatStatus === 'doing'"
@@ -68,22 +65,16 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
             :label="mode.label"
             :name="mode.value"
           >
-            <div class="bg-white rounded-lg max-w-2/3 px-3 py-3">
-              <IconFire
-                v-if="
-                  item[mode.value].content === '' &&
-                  item[mode.value].status === 'undo'
-                "
-              />
+            <div class="bg-white rounded-lg max-w-2/3 px-3 py-3 shadow-sm">
+              <IconFire v-if="item[mode.value].content === '' && item[mode.value].status === 'undo'"/>
               <IconFire
                 class="animate-pulse"
                 v-else-if="item[mode.value].content === ''"
               />
               <el-text
-                class="answer mx-10 text-black"
-                size="large"
-                v-html="item[mode.value].content"
-              ></el-text>
+                class="answer text-black" size="large"
+                v-html="item[mode.value].content">
+              </el-text>
             </div>
           </el-tab-pane>
           <div class="w-full h-6 relative mt-1">
@@ -91,33 +82,20 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
               class="absolute left top-0 text-blue-400 text-sm hover:text-gray-400"
             >
               <button
-                v-if="
-                  chatStore.questionList[index][item.activeAnswer].status ===
-                  'doing'
-                "
+                v-if="chatStore.questionList[index][item.activeAnswer].status === 'doing'"
                 @click="chatStore.closeQuestion(item.activeAnswer, index)"
               >
                 停止生成
               </button>
               <button
-                v-else-if="
-                  chatStore.questionList[index][item.activeAnswer].status ===
-                    'done' && chatStore.chatStatus !== 'doing'
-                "
-                @click="
-                  chatStore.reQuestion(item.question, item.activeAnswer, index)
-                "
+                v-else-if="chatStore.questionList[index][item.activeAnswer].status ==='done' && chatStore.chatStatus !== 'doing'"
+                @click="chatStore.reQuestion(item.question, item.activeAnswer, index)"
               >
                 重新生成
               </button>
               <button
-                v-else-if="
-                  chatStore.questionList[index][item.activeAnswer].status ===
-                  'undo'
-                "
-                @click="
-                  chatStore.reQuestion(item.question, item.activeAnswer, index)
-                "
+                v-else-if="chatStore.questionList[index][item.activeAnswer].status === 'undo'"
+                @click="chatStore.reQuestion(item.question, item.activeAnswer, index)"
                 class="text-gray-400"
               >
                 已停止
@@ -161,8 +139,8 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
   font-size: 0.875rem; /* 14px */
   line-height: 1.25rem; /* 20px */
   @media (min-width: 768px) {
-    font-size: 1rem; /* 16px */
-    line-height: 1.5rem; /* 24px */
+    font-size: 0.875rem; /* 16px */
+    line-height: 1.25rem; /* 24px */
   }
   :deep(h1) {
     font-weight: 600;

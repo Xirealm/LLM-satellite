@@ -8,14 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BaseType: typeof import('./src/components/BaseType.vue')['default']
-    DeleteIcon: typeof import('./src/components/icons/DeleteIcon.vue')['default']
-    EditIcon: typeof import('./src/components/icons/EditIcon.vue')['default']
     EditText: typeof import('./src/components/EditText.vue')['default']
-    ElButto: typeof import('element-plus/es')['ElButto']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
-    ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
@@ -26,9 +22,6 @@ declare module 'vue' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElLink: typeof import('element-plus/es')['ElLink']
-    ElMenu: typeof import('element-plus/es')['ElMenu']
-    ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
-    ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
@@ -36,7 +29,6 @@ declare module 'vue' {
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
@@ -50,11 +42,13 @@ declare module 'vue' {
     IconEdit: typeof import('./src/components/icons/IconEdit.vue')['default']
     IconSet: typeof import('./src/components/icons/IconSet.vue')['default']
     IconUpload: typeof import('./src/components/icons/IconUpload.vue')['default']
-    Menu: typeof import('./src/components/Menu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SetPopup: typeof import('./src/components/SetPopup.vue')['default']
     Upload: typeof import('./src/components/Upload.vue')['default']
     UploadPopup: typeof import('./src/components/UploadPopup.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

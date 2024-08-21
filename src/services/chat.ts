@@ -12,12 +12,12 @@ export const postSimilarText = (question: string): any => {
   const chatStore = useChatStore();
   source = axios.CancelToken.source();
   return http.post(
-    "http://39e0775c.r29.cpolar.top/api/similartext/",
+    "http://4afb32e1.r29.cpolar.top/api/similartext/",
     {
       query: question,
       account: userStore.user.account,
-      type: userStore.user.type,
-      pid: chatStore.currentBase,
+      type: chatStore.currentBase!.type,
+      pid: chatStore.currentBase!.id,
     },
     {
       cancelToken: source.token,

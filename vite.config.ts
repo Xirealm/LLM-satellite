@@ -41,7 +41,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://1035722e.r8.cpolar.cn",
+        target: "http://ef32db.r29.cpolar.top",
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
       },

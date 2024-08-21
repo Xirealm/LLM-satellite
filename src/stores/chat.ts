@@ -4,6 +4,7 @@ import { deleteQuestion, postSimilarText, source } from "@/services/chat";
 import type { Mode , Chat } from "@/types/chat.d.ts";
 import { marked } from "@/utils/marked";
 import markdownToTxt from "markdown-to-txt";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { useUserStore } from "./user";
 const userStore = useUserStore();
 
@@ -21,12 +22,24 @@ export const useChatStore = defineStore(
     ]);
     const chatStatus = ref<"undo" | "doing" | "done">("undo");
     const questionList = ref<Chat[]>([]);
-    const currentBase = ref("")
+    const currentBase = ref({
+      id: "",
+      name: "",
+      type: "",
+    });
     const newQuestion = () => {
       questionList.value = [];
     };
     const ws = ref<WebSocket>();
     const getAnswer = async (question: any, mode: Mode, index: number) => {
+      if (currentBase.value!.id === "" && mode !== "rawAnswer") {
+        ElMessage({
+          type: "error",
+          message: "尚未选择对话知识库",
+          duration: 2000,
+        });
+        return;
+      }
       questionList.value[index][mode].status = "doing";
       chatStatus.value = "doing";
       console.log(questionList.value[index][mode].status);
@@ -48,10 +61,10 @@ export const useChatStore = defineStore(
       }
       if (mode === "enhancedAnswer") {
         ws.value = new WebSocket(
-          "ws://39e0775c.r29.cpolar.top/api/enhance_socket"
+          "ws://4afb32e1.r29.cpolar.top/api/enhance_socket"
         );
       } else if (mode === "rawAnswer") {
-        ws.value = new WebSocket("ws://39e0775c.r29.cpolar.top/api/raw_socket");
+        ws.value = new WebSocket("ws://4afb32e1.r29.cpolar.top/api/raw_socket");
       }
       const sendMessage = () => {
         if (ws.value && ws.value.readyState === WebSocket.OPEN) {
@@ -59,8 +72,8 @@ export const useChatStore = defineStore(
             `{ 
               "query":"${question}",
               "account":"${userStore.user.account}",
-              "pid":"${currentBase.value}",
-              "type":"${userStore.user.type}"
+              "pid":"${currentBase.value!.id}",
+              "type":"${currentBase.value!.type}"
             }`
           );
         } else {

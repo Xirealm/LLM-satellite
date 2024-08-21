@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive,onMounted,watch } from "vue";
-import UploadPopup from "@/components/UploadPopup.vue"
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 import {
@@ -23,7 +23,20 @@ const getCheckFileList = async () => {
 const handleCheckFile = async (operate:boolean,pid: string, fid: string) => {
     const res = await patchCheckFileAPI(operate, pid, fid)
     console.log(res);
-    getCheckFileList()
+    if (res.code === 200) {
+        ElMessage({
+            message: '操作成功',
+            type: 'success',
+            duration: 1000,
+        })
+        getCheckFileList()
+    } else {
+        ElMessage({
+            message: '操作失败',
+            type: 'error',
+            duration: 1000,
+        })
+    }
 }
 
 watch(currentPage, () => {
@@ -31,12 +44,12 @@ watch(currentPage, () => {
 })
 
 const openCheckFileDialog = () => {
-  dialogVisible.value = true
-  getCheckFileList()
+    dialogVisible.value = true
+    getCheckFileList()
 }
 
 defineExpose({
-  openCheckFileDialog
+    openCheckFileDialog
 })
 </script>
 
@@ -66,24 +79,28 @@ defineExpose({
                       </EditText>
                     </template>
               </el-table-column> 
-              <el-table-column label="公共知识库" prop="share_collection" align="center"/>
               <el-table-column label="状态" prop="status" width="100" align="center">
                  <template #default="scope">
                     <el-tag v-if="scope.row.status === 'pending'" round type="warning">待审核</el-tag>   
                     <el-tag v-else round>已审核</el-tag>   
                 </template>
               </el-table-column> 
-              <el-table-column label="上传用户" prop="username" align="center"/>
-              <el-table-column label="上传时间" prop="upload_time" align="center" width="200"/>
-              <el-table-column label="审核" align="center" width="200">
+              <el-table-column label="申请用户" prop="username" align="center" width="120"/>
+              <el-table-column label="共享至公共知识库" prop="share_collection" align="center" width="150"/>
+              <el-table-column label="申请时间" prop="upload_time" align="center" width="200"/>
+              <el-table-column label="审核" align="center" width="180">
               <template #default="scope">
                 <template v-if="scope.row.status === 'pending'">
-                    <el-button class="w-20" type="primary" @click="handleCheckFile(true,scope.row.pid,scope.row.fid)">通过</el-button>
-                    <el-button class="w-20" type="danger" @click="handleCheckFile(false,scope.row.pid,scope.row.fid)">拒绝</el-button>
+                    <el-button 
+                        @click="handleCheckFile(true,scope.row.pid,scope.row.fid)"
+                        class="w-16" type="primary" size="small">通过</el-button>
+                    <el-button 
+                        @click="handleCheckFile(false,scope.row.pid,scope.row.fid)"    
+                        class="w-16" type="danger" size="small">拒绝</el-button>
                 </template>
                 <template v-else>
-                    <el-tag v-if="scope.row.is_upload ==='True'" type="success" size="large">通过</el-tag>
-                    <el-tag v-else type="danger" size="large">拒绝</el-tag>
+                    <el-tag v-if="scope.row.is_upload ==='True'" type="success">通过</el-tag>
+                    <el-tag v-else type="danger">拒绝</el-tag>
                 </template>
               </template>
               </el-table-column>

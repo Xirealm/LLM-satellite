@@ -8,7 +8,7 @@ import CreateBase from "./components/CreateBase.vue"
 import DeleteIcon from "./components/icons/DeleteIcon.vue"
 import CheckFileDialog from "./components/CheckFileDialog.vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getBaseListAPI , patchRenameBaseAPI } from "@/services/base";
+import { getBaseListAPI , patchRenameBaseAPI ,deleteBaseAPI } from "@/services/base";
 
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
@@ -41,12 +41,16 @@ const handleDelete = (index: number, row: any) => {
       type: 'warning',
     }
   )
-    .then(() => {
+    .then(async() => {
       console.log(index, row);
-      ElMessage({
-        type: 'success',
-        message: '删除成功',
-      })
+      const res = await deleteBaseAPI(row.pid, row.type)
+      if (res.code === 200) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功',
+        })
+        getBaseList()
+      }
     })
     .catch(() => {
       // ElMessage({
@@ -77,7 +81,7 @@ const renameBase = async (name:string,pid:string,type:string) => {
   console.log(result);
   if (result.code === 200) {
     ElMessage({
-      message: '重命名成功',
+      message: '修改成功',
       type: 'success',
       duration: 1000,
       onClose: () => {
@@ -87,13 +91,12 @@ const renameBase = async (name:string,pid:string,type:string) => {
   } else {
     getBaseList()
     ElMessage({
-      message: '重命名失败',
+      message: '修改失败',
       type: 'error',
       duration: 1000,
     })    
   }
 }
-
 </script>
 
 <template>
@@ -150,6 +153,7 @@ const renameBase = async (name:string,pid:string,type:string) => {
                 <el-table-column label="操作" align="center" width="100">
                 <template #default="scope">
                     <el-link
+                      v-if="userStore.user.type=== 'admin' || userStore.user.type=== 'normal' && scope.row.type=== 'personal'"
                       :underline="false"
                       class="icon-delete"
                       @click="handleDelete(scope.$index, scope.row)"
@@ -170,7 +174,7 @@ const renameBase = async (name:string,pid:string,type:string) => {
         </div>
   </div>
   <CreateBase ref="createBaseDialog" @created="createdBase"/>
-  <Base ref="baseDialog"/>
+  <Base ref="baseDialog" @close="getBaseList"/>
   <CheckFileDialog ref="checkFileDialog"/>
 </template>
 <style lang="scss">

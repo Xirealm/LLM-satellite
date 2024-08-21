@@ -2,15 +2,16 @@
 import { ref, reactive } from "vue";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
-import { UploadFilled } from "@element-plus/icons-vue";
-import Upload from "@/components/Upload.vue"
+import { ElMessage, ElMessageBox } from 'element-plus'
+// import { UploadFilled } from "@element-plus/icons-vue";
+// import Upload from "@/components/Upload.vue"
 import {
   postCreatePersonalBaseAPI,
   postCreatePublicBaseAPI,
 } from "@/services/base";
 import BaseType from "@/components/BaseType.vue";
 
-const uploadVisible = ref(false);
+// const uploadVisible = ref(false);
 const dialogVisible = ref(false);
 
 const emit = defineEmits(['created']);
@@ -32,11 +33,20 @@ const createBase = async () => {
       result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
     }
   }
-  console.log(result);
+  // console.log(result);
   if (result.code === 200) {
     dialogVisible.value = false
+    ElMessage({
+      message: '创建成功',
+      type: 'success'
+    })
     emit('created')
-  }  
+  } else {
+    ElMessage({
+      message: `创建失败,${result.msg}`,
+      type: 'error'
+    })
+  }
 }
 
 const options = [
@@ -53,10 +63,14 @@ const options = [
 const openCreateBaseDialog = () => {
   dialogVisible.value = true
 }
-
 defineExpose({
   openCreateBaseDialog
 })
+const handleClose = () => {
+  base.name = ""
+  base.synopsis = "",
+  base.type = "personal"
+}
 </script>
 
 <template>
@@ -64,6 +78,7 @@ defineExpose({
     v-model="dialogVisible"
     width="40vw"
     :z-index="100"
+    @close="handleClose"
   >
     <template #header>
         <h2 class="text-lg font-semibold">

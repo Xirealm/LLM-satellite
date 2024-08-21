@@ -3,10 +3,9 @@ import  { ref , computed ,onMounted} from "vue"
 import type { UploadProps, UploadFile } from 'element-plus'
 import { UploadFilled , Close} from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import UploadPopup from "./UploadPopup.vue";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore()
-import { postUploadAPI,postUploadToPublicFromAdminAPI } from "@/services/upload";
+import { postUploadAPI,postUploadToPublicFromAdminAPI,source} from "@/services/upload";
 import { getPublicBaseOptionAPI } from "@/services/base";
 const props = defineProps<{
   base?: {
@@ -15,6 +14,9 @@ const props = defineProps<{
     type:string
   }
 }>()
+console.log(props.base);
+const isUploading = ref(false)
+
 const fileList = ref<UploadFile[]>([])
 const fileSizeFormat = (size: number) => {
   if (size < 1024) return size + 'B'
@@ -65,14 +67,16 @@ const data = ref<any>({
 })
 const submit = async () => {
   console.log(data.value);
-  let result:any
+  isUploading.value = true
+  let result: any
   if (userStore.user.type === 'admin' && props.base?.type === 'public') {
     result = await postUploadToPublicFromAdminAPI(data.value.pid,fileList.value[0].raw as File)
   } else {
     result = await postUploadAPI(data.value.pid, data.value.is_share, data.value.sid, fileList.value[0].raw as File)  
   }
+  isUploading.value = false
   if (result.code === 200) {
-    ElMessage({type: 'success',message: '上传成功',duration: 1000})
+    ElMessage({type: 'success',message: '上传成功,文件正在转换',duration: 2000})
   } else {
     ElMessage({type: 'error',message: '上传失败',duration: 1000})
   }
@@ -84,12 +88,14 @@ defineExpose({
 
 <template>
     <el-upload 
+      v-loading = "isUploading"
       :auto-upload="false"
       :on-change="handleChange"
       :on-preview="handlePreview" 
       action="http://bf73703.r11.cpolar.top/api/db/psl/upload"
       :data="data"
       drag 
+      :limit="1"
       :show-file-list="false"
       class="md:block" hidden>
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
