@@ -45,6 +45,15 @@ export default defineConfig({
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      "/model/similartext/": {
+        target: "https://4afb32e1.r29.cpolar.top",
+        changeOrigin: true,
+      },
+      // "/model": {
+      //   target: "ws://4afb32e1.r29.cpolar.top",
+      //   changeOrigin: true,
+      //   ws: true,
+      // },
     },
   },
 });

@@ -61,10 +61,12 @@ export const useChatStore = defineStore(
       }
       if (mode === "enhancedAnswer") {
         ws.value = new WebSocket(
-          "ws://4afb32e1.r29.cpolar.top/api/enhance_socket"
+          "ws://356d9ab7.r29.cpolar.top/model/enhance_socket"
         );
       } else if (mode === "rawAnswer") {
-        ws.value = new WebSocket("ws://4afb32e1.r29.cpolar.top/api/raw_socket");
+        ws.value = new WebSocket(
+          "ws://356d9ab7.r29.cpolar.top/model/raw_socket"
+        );
       }
       const sendMessage = () => {
         if (ws.value && ws.value.readyState === WebSocket.OPEN) {

@@ -122,7 +122,7 @@ defineExpose({
         <el-radio :value="'True'" size="large">是</el-radio>
       </el-radio-group>
     </div>
-    <el-form-item label="公共知识库名称" v-if="data.is_share">
+    <el-form-item label="公共知识库名称" v-if="data.is_share === 'True'">
       <el-select
         v-model="data.sid"
         placeholder="未选择"

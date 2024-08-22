@@ -37,6 +37,7 @@ const options = ref<{
   type: string
 }[]>()
 const baseSelectRef = ref()
+const selectValue = ref('')
 const changeBase = (value: string) => {
   console.log(value);
   const base = options.value?.find((item) => {
@@ -107,8 +108,9 @@ const changeBase = (value: string) => {
         <el-text>当前对话知识库：</el-text>
       </span>
       <el-select
-        v-model="chatStore.currentBase!.id"
+        v-model="selectValue"
         placeholder="未选择"
+        @focus = getBaseOption
         ref="baseSelectRef"
         @change="changeBase"
       >
