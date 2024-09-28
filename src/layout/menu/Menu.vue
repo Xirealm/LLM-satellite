@@ -38,15 +38,18 @@ const options = ref<{
 }[]>()
 const baseSelectRef = ref()
 const selectValue = ref('')
-const changeBase = (value: string) => {
-  console.log(value);
-  const base = options.value?.find((item) => {
-    return item.value === value
+const changeBase = (value: any[]) => {
+  chatStore.selectedBases.personal = []
+  chatStore.selectedBases.public = []
+  value.forEach((item: any) => {
+    if (item.slice(0,3) === 'psl') {
+      chatStore.selectedBases.personal.push(item)
+    } else {
+      chatStore.selectedBases.public.push(item)
+    }
   })
-  chatStore.currentBase!.id = base!.value
-  chatStore.currentBase!.name = base!.label
-  chatStore.currentBase!.type = base!.type
 }
+const temperature = ref(0.7)
 </script>
 <template>
   <div
@@ -102,14 +105,22 @@ const changeBase = (value: string) => {
         /></span>
         <span class="text-sm">文件记录</span>
       </button>
+      <a href="/操作手册.docx" download target="_blank" class="w-full flex items-center p-2 my-1 hover:bg-slate-100 rounded-md"
+        :class="route.name === 'notebook' ? 'is-active bg-slate-100' : ''"
+        >
+        <span class="w-8"
+          ><img src="../../assets/image/menu/notebook.png" width="20" alt=""
+        /></span>
+        <span class="text-sm">操作手册</span>
+      </a>
     </div>
     <div class="flex bg-white my-5 flex-col w-4/5 py-3 px-2 items-start rounded-md">
       <span class="mb-2">
-        <el-text>当前对话知识库：</el-text>
+        <el-text>对话知识库：</el-text>
       </span>
       <el-select
         v-model="selectValue"
-        placeholder="未选择"
+        multiple
         @focus = getBaseOption
         ref="baseSelectRef"
         @change="changeBase"
@@ -125,6 +136,30 @@ const changeBase = (value: string) => {
           </div>
         </el-option>
       </el-select>
+      <div class="w-full">
+        <el-text>相似文本精度:</el-text>
+        <el-slider v-model="chatStore.topK" :min="1" :max="15"/>
+        <div class="flex justify-between">
+          <el-text>1(严谨)</el-text>
+          <el-text>15(发散)</el-text>
+        </div>
+      </div>
+      <div class="w-full">
+        <el-text>概率阈值:</el-text>
+        <el-slider v-model="chatStore.topP" :min="0.1" :max="1.0" :step="0.1"/>
+        <div class="flex justify-between">
+          <el-text>0.1(严谨)</el-text>
+          <el-text>1.0(发散)</el-text>
+        </div>
+      </div>
+      <div class="w-full">
+        <el-text>文本随机性:</el-text>
+        <el-slider v-model="chatStore.temperature" :min="0.1" :max="1.0" :step="0.1"/>
+        <div class="flex justify-between">
+          <el-text>0.1(严谨)</el-text>
+          <el-text>1.0(发散)</el-text>
+        </div>
+      </div>
     </div>
   </div>
   <History v-model="isHistoryOpen" />

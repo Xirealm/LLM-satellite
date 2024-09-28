@@ -145,25 +145,25 @@ const changeActiveAnswer = (question: string, mode: Mode, index: number) => {
   :deep(h1) {
     font-weight: 600;
     @media (min-width: 768px) {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
     }
   }
   :deep(h2) {
     font-weight: 500;
     @media (min-width: 768px) {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
   }
   :deep(h3) {
     font-weight: 500;
     @media (min-width: 768px) {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
   }
   :deep(h4) {
     font-weight: 500;
     @media (min-width: 768px) {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
   }
   :deep(h5) {

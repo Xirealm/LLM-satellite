@@ -5,6 +5,8 @@ const userStore = useUserStore();
 export const http = axios.create({
   // baseURL: "http://47.100.198.147:7001/api",
   // baseURL: "http://3979c592.r11.cpolar.top/api",
+  // baseURL: "http://192.168.31.43:8000",
+  // baseURL: "http://192.168.31.43:8000",
 });
 // 添加请求拦截器
 http.interceptors.request.use(

@@ -129,7 +129,12 @@ const handleClose = () => {
                   <template v-else>否</template>
                 </template>
               </el-table-column> 
-              <el-table-column v-if="base.type === 'personal'"  label="共享知识库" prop="share_collection" align="center" width="200"/>
+              <el-table-column v-if="base.type === 'personal'" label="共享知识库" prop="share_collection" align="center" width="200">
+                <template #default="scope">
+                  <template v-if="scope.row.is_share === 'True'">{{scope.row.share_collection.name}}</template>
+                  <template v-else></template>
+                </template>
+              </el-table-column>
               <el-table-column label="上传时间" prop="upload_time" align="center" width="200"/>
               <el-table-column 
                 v-if="base.type === 'personal' || base.type === 'public' && userStore.user.type==='admin'"   

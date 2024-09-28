@@ -13,6 +13,7 @@ import BaseType from "@/components/BaseType.vue";
 
 // const uploadVisible = ref(false);
 const dialogVisible = ref(false);
+const isLoading = ref(false);
 
 const emit = defineEmits(['created']);
 
@@ -23,6 +24,7 @@ const base = reactive({
 });
 const createBase = async () => {
   let result
+  isLoading.value = true;
   if (userStore.user.type === 'normal') {
     result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
   }
@@ -35,13 +37,15 @@ const createBase = async () => {
   }
   // console.log(result);
   if (result.code === 200) {
-    dialogVisible.value = false
+    isLoading.value = false
     ElMessage({
       message: '创建成功',
       type: 'success'
     })
     emit('created')
+    dialogVisible.value = false
   } else {
+    isLoading.value = false
     ElMessage({
       message: `创建失败,${result.msg}`,
       type: 'error'
@@ -86,7 +90,8 @@ const handleClose = () => {
             <BaseType :type="base.type" />
         </h2>
     </template>
-    <el-form-item 
+    <el-form v-loading="isLoading">
+      <el-form-item 
       v-if="userStore.user.type==='admin'"
       label="知识库类型"
     >
@@ -101,24 +106,25 @@ const handleClose = () => {
           :value="item.value">
         </el-option>
       </el-select>
-    </el-form-item>
-    <el-form-item label="知识库名称">
-      <el-input v-model="base.name" placeholder="请输入知识库名称"/>
-    </el-form-item>
-    <el-form-item label="知识库简介">
-      <el-input
-        v-model="base.synopsis"
-        :rows="8"
-        resize="none"
-        type="textarea"
-        maxlength="200"
-        show-word-limit
-        placeholder="请输入知识库简介"
-      />
-    </el-form-item>
+      </el-form-item>
+      <el-form-item label="知识库名称">
+        <el-input v-model="base.name" placeholder="请输入知识库名称"/>
+      </el-form-item>
+      <el-form-item label="知识库简介">
+        <el-input
+          v-model="base.synopsis"
+          :rows="8"
+          resize="none"
+          type="textarea"
+          maxlength="200"
+          show-word-limit
+          placeholder="请输入知识库简介"
+        />
+      </el-form-item>
+      <div class="flex justify-end">
+        <el-button type="primary" @click="createBase" :disabled="!base.name || !base.synopsis">创建</el-button>
+      </div>
+    </el-form>
     <!-- <Upload/> -->
-    <template #footer>
-        <el-button type="primary" @click="createBase">创建</el-button>
-    </template>
   </el-dialog>
 </template>

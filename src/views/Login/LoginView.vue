@@ -11,17 +11,14 @@ const router = useRouter();
 const status = ref<"login" | "register">("login");
 </script>
 <template>
-  <div class="flex">
-    <div class="bg-[url(/src/assets/image/login/loginBg.png)] bg-cover bg-no-repeat h-[100vh] w-[30vw] flex flex-col items-center">
-      <img src="../../assets/title.png" class="mt-28 w-3/5" />
-      <h1 class="z-50 text-white text-2xl mt-20">{{ chatStore.title }}</h1>
-      <span class="text-white text-xs mt-2">
-        你好，欢迎使用{{ chatStore.title }}
-      </span>
+  <div class="flex h-full w-full bg-blue justify-between items-center bg-blue-500">
+    <div class="h-full w-1/2 flex items-center justify-center">
+      <img src="../../assets/image/login/login_pic.png" class="w-[500px] h-[400px]">
     </div>
-    <div class="flex flex-1 items-center justify-center">
+    <div class="h-full w-1/2 flex items-center justify-center bg-white rounded-l-[40px]">
       <div 
-        class="bg-white flex flex-col items-center h-[320px] w-2/5 justify-between px-10 py-6 rounded-xl border">
+        class="flex flex-col items-center h-[450px] w-3/5 justify-between">
+        <img src="../../assets/login_title.png" class="w-full mb-8">
         <Login 
           v-if="status === 'login'" 
           v-model:status="status" />

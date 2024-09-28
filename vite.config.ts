@@ -41,12 +41,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://ef32db.r29.cpolar.top",
+        target: "http://djtest0001.cpolar.top",
+        // target: "http://ssltest0001.cpolar.top/",
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      "/model/similartext/": {
-        target: "https://4afb32e1.r29.cpolar.top",
+      "/model/similartext": {
+        target: "http://ssltest0001.cpolar.top/",
         changeOrigin: true,
       },
       // "/model": {

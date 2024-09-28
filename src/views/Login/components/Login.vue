@@ -18,7 +18,6 @@ const loginData = ref({
 })
 const login = async () => {
     const result = await postLogin(loginData.value.account,loginData.value.password)
-    // console.log(result);
     if (result.code === 200) {
         userStore.setUser(
             result.account,
@@ -43,13 +42,15 @@ const login = async () => {
 }
 </script>
 <template>
-    <span class="text-2xl pb-4">欢迎使用{{ chatStore.title }}</span>
+    <span class="text-3xl w-full text-[#152c5b] font-extrabold ">Sign In</span>
     <el-form class="w-full">
-        <el-form-item label="账号" class="w-full">
-        <el-input v-model="loginData.account" placeholder="请输入手机号" />
+        <el-form-item  class="w-full">
+            <label class="text-[#152c5b] font-bold tracking-widest">账号：</label>
+            <el-input v-model="loginData.account" placeholder="请输入手机号" />
         </el-form-item>
-        <el-form-item label="密码" class="w-full">
-        <el-input v-model="loginData.password" type="password" placeholder="请输入登录密码" />
+        <el-form-item class="w-full">
+            <label class="text-[#152c5b] font-bold tracking-widest">密码：</label>
+            <el-input v-model="loginData.password" type="password" placeholder="请输入登录密码" />
         </el-form-item>
     </el-form>
     <div class="flex justify-between w-full mb-4">
@@ -57,14 +58,17 @@ const login = async () => {
         <el-link class="text-xs">忘记密码？</el-link>
     </div>
     <el-button 
-        :disabled="!loginData.account || !loginData.password" round color="#01358e" size="large" @click="login">
+        class="w-full"
+        :disabled="!loginData.account || !loginData.password" 
+        color="#3b82f6" size="large" 
+        @click="login">
         <span class="px-4 text-md">登录</span>
     </el-button>
 </template>
 
 <style scoped lang='scss'>
 .el-form-item__label{
-    font-size: 30px;
+    font-size: 50px;
+    color: #3b82f6 !important;
 }
-
 </style>

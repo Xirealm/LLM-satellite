@@ -6,11 +6,15 @@ import History from "@/components/History.vue";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 import { useChatStore } from "@/stores/chat";
+import { postLogout } from "@/services/user";
 const chatStore = useChatStore();
 const isHistoryOpen = ref(false);
-const logout = () => {
-  userStore.logout()
-  router.push("/login")
+const logout = async () => {
+  const result = await postLogout(userStore.user.account)
+  if (result.code === 200) {
+    userStore.logout()
+    router.push("/login")
+  }
 }
 </script>
 

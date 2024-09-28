@@ -61,12 +61,15 @@ onMounted(async () => {
 })
 const data = ref<any>({
   pid:props.base?.id,
-  is_share: false,
+  is_share: 'False',
   account: userStore.user.account,
   sid:null
 })
 const submit = async () => {
-  console.log(data.value);
+  if (fileList.value.length === 0) {
+    ElMessage.error('请先选择文件')
+    return
+  }
   isUploading.value = true
   let result: any
   if (userStore.user.type === 'admin' && props.base?.type === 'public') {

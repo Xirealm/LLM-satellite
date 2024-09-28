@@ -65,15 +65,16 @@ watch(currentPage, () => {
               <template v-else-if="scope.row.is_share === 'False'">否</template>
             </template>
           </el-table-column>
-          <el-table-column label="共享知识库" prop="share_collection" width="150">
+          <el-table-column label="共享知识库" prop="share_collection" width="150" align="center">
             <template #default="scope">
-              {{ scope.row.share_collection === 'Unknow' ? '无': scope.row.share_collection}}
+              {{ scope.row.share_collection === 'Unknow' ? '': scope.row.share_collection}}
             </template>
           </el-table-column>
           <el-table-column label="结果" prop="status" align="center" width="100">
             <template #default="scope">
               <el-tag v-if="scope.row.status === 'success'" type="success">入库成功</el-tag>
               <el-tag v-else-if="scope.row.status === 'failure'" type="danger">入库失败</el-tag>
+              <el-tag v-else-if="scope.row.status === 'error'" type="danger">转换失败</el-tag>
               <el-tag v-else-if="scope.row.status === 'false'" type="info">已删除</el-tag>
               <el-tag v-else type="warning">转换中</el-tag>
             </template>

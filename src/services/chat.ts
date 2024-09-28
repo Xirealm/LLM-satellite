@@ -12,12 +12,13 @@ export const postSimilarText = (question: string): any => {
   const chatStore = useChatStore();
   source = axios.CancelToken.source();
   return http.post(
-    "/model/similartext/",
+    "/model/similartext",
     {
       query: question,
       account: userStore.user.account,
-      type: chatStore.currentBase!.type,
-      pid: chatStore.currentBase!.id,
+      personal: chatStore.selectedBases.personal,
+      public: chatStore.selectedBases.public,
+      top_k: chatStore.topK,
     },
     {
       cancelToken: source.token,

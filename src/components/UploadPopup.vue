@@ -3,7 +3,8 @@ import  { ref } from "vue"
 import { UploadFilled } from '@element-plus/icons-vue'
 import Upload from "./Upload.vue";
 import { ElMessage } from 'element-plus'
-
+import { useRouter } from "vue-router";
+const router = useRouter()
 const isShow = defineModel('isShow')
 
 const props=defineProps<{
@@ -16,9 +17,9 @@ const props=defineProps<{
 
 const upload = ref()
 const handleUpload = async() => {
-  console.log(upload.value.fileList);
   await upload.value.submit()
   isShow.value = false
+  router.push('/fileRecords')
 }
 //上传数据
 </script>

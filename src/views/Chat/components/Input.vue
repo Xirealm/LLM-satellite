@@ -36,7 +36,9 @@ const feedData = () => {
 // 发送问题
 const sendQuestion = async () => {
   console.log(input.value);
-  if (chatStore.currentBase!.id === "" && chatStore.chatMode !== "rawAnswer") {
+  console.log(chatStore.selectedBases);
+  
+  if (chatStore.selectedBases.personal.length === 0 && chatStore.selectedBases.public.length === 0 && chatStore.chatMode !== "rawAnswer") {
     ElMessage({
       type: 'error',
       message: '尚未选择对话知识库',
@@ -82,17 +84,17 @@ defineEmits(["sendQuestion"]);
         </button>
       </div>
       <div class="bg-white py-3 px-2 flex flex-between rounded-lg w-full">
-        <el-tooltip effect="light" content="文件上传" placement="top">
+        <!-- <el-tooltip effect="light" content="文件上传" placement="top">
           <button
             @click="feedData"
             class="transition duration-300 ease-in-out scale-75 md:scale-100 text-white mr-1"
           >
             <IconUpload />
           </button>
-        </el-tooltip>
+        </el-tooltip> -->
         <input
           v-model="input"
-          class="bg-transparent focus:outline-none md:w-11/12 w-5/6"
+          class="bg-transparent focus:outline-none md:w-[95%] w-5/6"
           @keyup.enter="sendQuestion"
           placeholder="请输入你的问题或关键词"
         />

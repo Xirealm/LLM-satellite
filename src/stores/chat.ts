@@ -27,12 +27,24 @@ export const useChatStore = defineStore(
       name: "",
       type: "",
     });
+    const selectedBases = ref<{
+      personal: string[],
+      public:string[]
+    }>({
+      personal: [],
+      public:[]
+    })
+    const topK = ref<number>()
+    const topP = ref<number>()
+    const temperature = ref<number>()
     const newQuestion = () => {
       questionList.value = [];
     };
     const ws = ref<WebSocket>();
-    const getAnswer = async (question: any, mode: Mode, index: number) => {
-      if (currentBase.value!.id === "" && mode !== "rawAnswer") {
+    const getAnswer = async (question: string, mode: Mode, index: number) => {
+      if (
+        selectedBases.value.personal.length === 0 && selectedBases.value.public.length === 0 && chatMode.value !== "rawAnswer"
+      ) {
         ElMessage({
           type: "error",
           message: "尚未选择对话知识库",
@@ -42,7 +54,7 @@ export const useChatStore = defineStore(
       }
       questionList.value[index][mode].status = "doing";
       chatStatus.value = "doing";
-      console.log(questionList.value[index][mode].status);
+      // console.log(questionList.value[index][mode].status);
       if (mode === "similarText") {
         try {
           const result = await postSimilarText(question);
@@ -61,22 +73,33 @@ export const useChatStore = defineStore(
       }
       if (mode === "enhancedAnswer") {
         ws.value = new WebSocket(
-          "ws://356d9ab7.r29.cpolar.top/model/enhance_socket"
+          "ws://ssltest0001.cpolar.top/model/muti/enhance_socket"
         );
       } else if (mode === "rawAnswer") {
         ws.value = new WebSocket(
-          "ws://356d9ab7.r29.cpolar.top/model/raw_socket"
+          "ws://ssltest0001.cpolar.top/model/raw_socket"
         );
       }
       const sendMessage = () => {
         if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+          // ws.value.send(
+          //   `{ 
+          //     "query":"${question}",
+          //     "account":"${userStore.user.account}",
+          //     "pid":"${currentBase.value!.id}",
+          //     "type":"${currentBase.value!.type}"
+          //   }`
+          // );
           ws.value.send(
-            `{ 
-              "query":"${question}",
-              "account":"${userStore.user.account}",
-              "pid":"${currentBase.value!.id}",
-              "type":"${currentBase.value!.type}"
-            }`
+            JSON.stringify({
+              query: question,
+              account: userStore.user.account,
+              personal: selectedBases.value.personal,
+              public: selectedBases.value.public,
+              top_k: topK.value,
+              top_p: topP.value,
+              temperature: temperature.value,
+            })
           );
         } else {
           console.error("WebSocket is not connected");
@@ -128,6 +151,10 @@ export const useChatStore = defineStore(
       title,
       ws,
       currentBase,
+      selectedBases,
+      topK,
+      topP,
+      temperature,
       chatMode,
       chatStatus,
       modeList,

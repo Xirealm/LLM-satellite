@@ -22,3 +22,12 @@ export const postLogin = (account: string,password: string): any => {
     password: password,
   });
 };
+/**
+ * 退出登录
+ * @param
+ */
+export const postLogout = (account: string): any => {
+  return http.post("/api/Users/logout", {
+    account: account,
+  });
+};
