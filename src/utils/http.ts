@@ -25,6 +25,10 @@ http.interceptors.request.use(
 // 添加响应拦截器
 http.interceptors.response.use(
   (response) => {
+    if (response.data.code === 11401) {
+      userStore.logout();
+      window.location.href = "/";
+    }
     // 2xx 范围内的状态码触发该函数。
     return response.data;
   },
