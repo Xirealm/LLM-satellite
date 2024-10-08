@@ -7,6 +7,7 @@ export const http = axios.create({
   // baseURL: "http://3979c592.r11.cpolar.top/api",
   // baseURL: "http://192.168.31.43:8000",
   // baseURL: "http://192.168.31.43:8000",
+  timeout:5000
 });
 // 添加请求拦截器
 http.interceptors.request.use(

@@ -25,29 +25,37 @@ const base = reactive({
 const createBase = async () => {
   let result
   isLoading.value = true;
-  if (userStore.user.type === 'normal') {
+  try {
+    if (userStore.user.type === 'normal') {
     result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
-  }
-  else if (userStore.user.type === 'admin') {
-    if (base.type === 'public') {
-      result = await postCreatePublicBaseAPI(base.name, base.synopsis)
-    } else if (base.type === 'personal') {
-      result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
     }
-  }
-  // console.log(result);
-  if (result.code === 200) {
+    else if (userStore.user.type === 'admin') {
+      if (base.type === 'public') {
+        result = await postCreatePublicBaseAPI(base.name, base.synopsis)
+      } else if (base.type === 'personal') {
+        result = await postCreatePersonalBaseAPI(base.name, base.synopsis)
+      }
+    }
+    // console.log(result);
+    if (result.code === 200) {
+      isLoading.value = false
+      ElMessage({
+        message: '创建成功',
+        type: 'success'
+      })
+      emit('created')
+      dialogVisible.value = false
+    } else {
+      isLoading.value = false
+      ElMessage({
+        message: `创建失败,${result.msg}`,
+        type: 'error'
+      })
+    }
+  } catch {
     isLoading.value = false
     ElMessage({
-      message: '创建成功',
-      type: 'success'
-    })
-    emit('created')
-    dialogVisible.value = false
-  } else {
-    isLoading.value = false
-    ElMessage({
-      message: `创建失败,${result.msg}`,
+      message: `创建失败`,
       type: 'error'
     })
   }
