@@ -70,7 +70,7 @@ defineEmits(["sendQuestion"]);
   <div class="index-100 fixed bottom-0 h-[120px] md:h-[130px] w-full">
     <div class="flex flex-wrap justify-between md:w-1/2 w-11/12 mx-auto mb-2">
       <div class="flex gap-px sm:gap-1 mb-2">
-        <button
+        <!-- <button
           v-for="item in chatStore.modeList"
           :class="
             chatStore.chatMode == item.value
@@ -81,7 +81,7 @@ defineEmits(["sendQuestion"]);
           @click="chatStore.chatMode = item.value"
         >
           {{ item.label }}
-        </button>
+        </button> -->
       </div>
       <div class="bg-white py-3 px-2 flex flex-between rounded-lg w-full">
         <!-- <el-tooltip effect="light" content="文件上传" placement="top">
