@@ -73,11 +73,11 @@ export const useChatStore = defineStore(
       }
       if (mode === "enhancedAnswer") {
         ws.value = new WebSocket(
-          "ws://ssltest0001.cpolar.top/model/muti/enhance_socket"
+          "ws://101.132.27.195:9873/model/muti/enhance_socket"
         );
       } else if (mode === "rawAnswer") {
         ws.value = new WebSocket(
-          "ws://ssltest0001.cpolar.top/model/raw_socket"
+          "ws://101.132.27.195:9873/model/raw_socket"
         );
       }
       const sendMessage = () => {
